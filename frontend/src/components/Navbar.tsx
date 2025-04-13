@@ -12,7 +12,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <h1 className="text-2xl font-bold text-blue-700 tracking-tight">
-          Inversiones J.A
+          Fondo de Empleados
         </h1>
 
         {/* Menú hamburguesa visible solo en móvil */}
