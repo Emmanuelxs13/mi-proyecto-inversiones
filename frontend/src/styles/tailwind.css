@@ -1,0 +1,16 @@
+/* src/styles/tailwind.css */
+/* Tailwind base (necesario si usamos @layer base) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Establece estilos base dentro de la capa base */
+@layer base {
+    body {
+      background-color: white; /* Fondo blanco */
+      color: #1f2937; /* Gris oscuro para buen contraste */
+      font-family: 'Inter', system-ui, sans-serif; /* Fuente profesional */
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+  
