@@ -8,7 +8,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="bg-gradient-to-b from-blue-100 to-white py-20 text-center"
+      className="bg-gradient-to-b from-blue-100 to-white py-20 text-center animate-fade-in"
     >
       <div className="max-w-3xl mx-auto">
         {/* Título principal */}

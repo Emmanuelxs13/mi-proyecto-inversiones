@@ -27,7 +27,7 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="bg-neutral py-16 px-4 text-center">
+    <section id="features" className="bg-neutral py-16 px-4 text-center animate-fade-in">
       <div className="max-w-6xl mx-auto">
         {/* Título */}
         <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-10">

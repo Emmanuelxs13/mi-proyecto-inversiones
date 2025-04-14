@@ -6,7 +6,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-100 text-gray-700 py-8 px-4 text-center border-t">
+    <footer className="bg-gray-100 text-gray-700 py-8 px-4 text-center border-t animate-fade-in">
       <div className="max-w-4xl mx-auto">
         {/* Nombre o logo */}
         <h2 className="text-lg font-bold text-primary">Fondo de Empleados</h2>
@@ -16,9 +16,9 @@ const Footer = () => {
 
         {/* Enlaces rápidos (anclas internas) */}
         <nav className="mt-4 flex justify-center gap-6 text-sm">
-          <a href="#hero" className="hover:text-blue-600 transition">Inicio</a>
-          <a href="#features" className="hover:text-blue-600 transition">Beneficios</a>
-          <a href="#contact" className="hover:text-blue-600 transition">Contacto</a>
+          <a href="#hero" className="hover:text-blue-600 transition duration-300 ease-in-out">Inicio</a>
+          <a href="#features" className="hover:text-blue-600 transition duration-300 ease-in-out">Beneficios</a>
+          <a href="#contact" className="hover:text-blue-600 transition duration-300 ease-in-out">Contacto</a>
         </nav>
       </div>
     </footer>
