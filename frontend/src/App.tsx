@@ -1,6 +1,6 @@
 // Importamos los componentes principales que conforman la Landing Page
 import Navbar from "./components/Navbar";
-//import Hero from "./components/Hero";
+import Hero from "./components/Hero";
 //import Features from "./components/Features";
 //import Footer from "./components/Footer";
 
@@ -14,7 +14,7 @@ const Home = () => {
       <Navbar />
 
       {/* Sección Hero (bienvenida visual) */}
-     {/*  <Hero /> */}
+      <Hero /> 
 
       {/* Sección de características o beneficios */}
       {/* <Features /> */}
