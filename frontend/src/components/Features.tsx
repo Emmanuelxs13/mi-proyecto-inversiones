@@ -1,53 +1,57 @@
 // Features.tsx
-// Sección que presenta características clave o beneficios del servicio
+// Sección de beneficios o características destacadas del sistema
+// Priorizando claridad, accesibilidad y estructura responsive para una mejor UX
+
+import React from "react";
 
 const Features = () => {
-    return (
-      <section
-        id="features"
-        className="py-20 bg-white text-center border-t border-gray-200"
-      >
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-blue-700 mb-12">
-            ¿Por qué elegirnos?
-          </h2>
-  
-          {/* Tres características en tarjetas */}
-          <div className="grid gap-8 md:grid-cols-3">
-            {/* Tarjeta 1 */}
-            <div className="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-lg transition">
-              <h3 className="text-xl font-semibold text-blue-600 mb-2">
-                Simulación en tiempo real
+  const beneficios = [
+    {
+      titulo: "Simulador Financiero",
+      descripcion:
+        "Calcula posibles rendimientos y compara escenarios de inversión en tiempo real.",
+      icono: "💹",
+    },
+    {
+      titulo: "Gestor de Portafolios",
+      descripcion:
+        "Organiza tus activos, asigna porcentajes y visualiza tu crecimiento.",
+      icono: "📊",
+    },
+    {
+      titulo: "Interfaz Intuitiva",
+      descripcion:
+        "Diseñada para usuarios con y sin experiencia en inversiones.",
+      icono: "🧠",
+    },
+  ];
+
+  return (
+    <section id="features" className="bg-neutral py-16 px-4 text-center">
+      <div className="max-w-6xl mx-auto">
+        {/* Título */}
+        <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-10">
+          Beneficios de usar el Fondo de Inversiones
+        </h2>
+
+        {/* Lista de beneficios */}
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {beneficios.map((item, idx) => (
+            <div
+              key={idx}
+              className="bg-white rounded-xl p-6 shadow hover:shadow-md transition text-left"
+            >
+              <div className="text-4xl mb-4">{item.icono}</div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                {item.titulo}
               </h3>
-              <p className="text-gray-600">
-                Calcula tus inversiones y proyecciones fácilmente.
-              </p>
+              <p className="text-gray-600">{item.descripcion}</p>
             </div>
-  
-            {/* Tarjeta 2 */}
-            <div className="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-lg transition">
-              <h3 className="text-xl font-semibold text-blue-600 mb-2">
-                Interfaz amigable
-              </h3>
-              <p className="text-gray-600">
-                Diseñada para usuarios sin experiencia financiera.
-              </p>
-            </div>
-  
-            {/* Tarjeta 3 */}
-            <div className="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-lg transition">
-              <h3 className="text-xl font-semibold text-blue-600 mb-2">
-                Resultados confiables
-              </h3>
-              <p className="text-gray-600">
-                Basados en fórmulas y tasas actualizadas.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
-      </section>
-    );
-  };
-  
-  export default Features;
-  
+      </div>
+    </section>
+  );
+};
+
+export default Features;
