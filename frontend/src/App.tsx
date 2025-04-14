@@ -2,6 +2,7 @@
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Features from "./components/Features";
+import Contact from "./components/Contact";
 //import Footer from "./components/Footer";
 
 // Página principal de la aplicación (Landing Page)
@@ -18,6 +19,9 @@ const Home = () => {
 
       {/* Sección de características o beneficios */}
       <Features /> 
+
+      {/* Sección de Contactos */}
+      <Contact />
 
       {/* Pie de página */}
       {/* <Footer /> */}
