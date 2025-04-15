@@ -11,6 +11,12 @@ const Simulator = () => {
   const [plazo, setPlazo] = useState<number>(0);
   const [tipo, setTipo] = useState<string>("Provisional");
 
+  // Estados para validación de campos
+  const [capitalError, setCapitalError] = useState(false); // Marca si el campo capital es inválido
+  const [interesError, setInteresError] = useState(false); // Marca si el campo interés es inválido
+  const [plazoError, setPlazoError] = useState(false);     // Marca si el campo plazo es inválido
+
+
   // Formateador de moneda en pesos colombianos
   const formatoPesos = new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -28,6 +34,7 @@ const Simulator = () => {
 
   // Cálculo de interés mensual (conversión de tasa anual % a decimal mensual)
   const interesMensual = interes / 12 / 100;
+  
 
   // Cálculo financiero según tipo de crédito
   if (capital > 0 && interes > 0 && plazo > 0) {
@@ -80,15 +87,21 @@ const Simulator = () => {
               <input
                 type="text"
                 inputMode="numeric"
-                value={capital === 0 ? "" : formatoNumerico.format(capital)} // Muestra con puntos
+                value={capital === 0 ? "" : formatoNumerico.format(capital)}
                 onChange={(e) => {
-                  // Reemplaza puntos y caracteres no numéricos
                   const value = e.target.value.replace(/\./g, "").replace(/[^0-9]/g, "");
                   setCapital(Number(value));
+                  setCapitalError(false); // Limpia error mientras escribe
+                }}
+                onBlur={() => {
+                  if (capital <= 0) setCapitalError(true); // Marca error si vacío o cero
                 }}
                 placeholder="Ingrese monto"
-                className="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className={`mt-1 w-full border ${capitalError ? "border-red-500" : "border-gray-300"} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
               />
+              {capitalError && (
+                <p className="text-red-500 text-sm mt-1">El capital es obligatorio y debe ser mayor a 0.</p>
+              )}
             </div>
 
             {/* Input Interés con formato visual */}
@@ -97,14 +110,21 @@ const Simulator = () => {
               <input
                 type="text"
                 inputMode="numeric"
-                value={interes === 0 ? "" : formatoNumerico.format(interes)} // Formatea con puntos
+                value={interes === 0 ? "" : formatoNumerico.format(interes)} // Muestra con puntos
                 onChange={(e) => {
                   const value = e.target.value.replace(/\./g, "").replace(/[^0-9]/g, "");
-                  setInteres(Number(value));
+                  setInteres(Number(value)); // Guarda el valor
+                  setInteresError(false); // Limpia el error al escribir
+                }}
+                onBlur={() => {
+                  if (interes <= 0) setInteresError(true); // Activa error si el valor no es válido
                 }}
                 placeholder="Ej: 12"
-                className="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className={`mt-1 w-full border ${interesError ? "border-red-500" : "border-gray-300"} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
               />
+              {interesError && (
+                <p className="text-red-500 text-sm mt-1">El interés debe ser mayor a 0.</p>
+              )}
             </div>
 
             {/* Input Plazo con formato visual */}
@@ -113,14 +133,21 @@ const Simulator = () => {
               <input
                 type="text"
                 inputMode="numeric"
-                value={plazo === 0 ? "" : formatoNumerico.format(plazo)}
+                value={plazo === 0 ? "" : formatoNumerico.format(plazo)} // Muestra el número con puntos
                 onChange={(e) => {
-                  const value = e.target.value.replace(/\./g, "").replace(/[^0-9]/g, "");
-                  setPlazo(Number(value));
+                  const value = e.target.value.replace(/\./g, "").replace(/[^0-9]/g, ""); // Limpia puntos y no numéricos
+                  setPlazo(Number(value)); // Asigna el valor como número
+                  setPlazoError(false); // Elimina error al escribir
+                }}
+                onBlur={() => {
+                  if (plazo <= 0) setPlazoError(true); // Marca error si vacío o cero
                 }}
                 placeholder="Ej: 12"
-                className="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className={`mt-1 w-full border ${plazoError ? "border-red-500" : "border-gray-300"} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
               />
+              {plazoError && (
+                <p className="text-red-500 text-sm mt-1">El plazo debe ser mayor a 0.</p>
+              )}
             </div>
 
             {/* Selector de tipo de crédito */}
