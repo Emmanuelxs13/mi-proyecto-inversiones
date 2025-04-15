@@ -1,6 +1,6 @@
 // Navbar.tsx
 // Encabezado fijo y responsive con navegación clara y experiencia optimizada
-
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -38,18 +38,24 @@ const Navbar = () => {
 
         {/* Menú en escritorio */}
         <nav className="hidden md:flex space-x-10">
-          <a
-            href="#hero"
+          <Link
+            to="/"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
           >
             Inicio
-          </a>
+          </Link>
           <a
             href="#features"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
           >
             Beneficios
           </a>
+          <Link
+            to="/simulador"
+            className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
+          >
+            Simulador
+          </Link>
           <a
             href="#contact"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
@@ -63,13 +69,13 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden px-6 pb-4 bg-white shadow-inner">
           <nav className="flex flex-col space-y-4 text-center">
-            <a
-              href="#hero"
+            <Link
+              to="/"
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
               Inicio
-            </a>
+            </Link>
             <a
               href="#features"
               onClick={() => setIsOpen(false)}
@@ -77,6 +83,13 @@ const Navbar = () => {
             >
               Beneficios
             </a>
+            <Link
+              to="/simulador"
+              onClick={() => setIsOpen(false)}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              Simulador
+            </Link>
             <a
               href="#contact"
               onClick={() => setIsOpen(false)}
