@@ -1,32 +1,29 @@
-// Importamos los componentes principales que conforman la Landing Page
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Features from "./components/Features";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+// App.tsx
+// Archivo principal de la aplicación donde se definen las rutas de navegación.
+// Utiliza React Router para mostrar diferentes vistas según la URL actual.
 
-// Página principal de la aplicación (Landing Page)
-const Home = () => {
+// Importamos componentes necesarios de React Router
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Importamos las páginas o vistas que vamos a mostrar en distintas rutas
+import Home from "./pages/Home"; // Página principal o landing page
+import Simulator from "./components/Simulator"; // Página del simulador (vista independiente)
+
+function App() {
   return (
-    // Contenedor principal de la página con layout en columna y altura mínima igual a la pantalla
-    <div className="flex flex-col min-h-screen bg-white">
-      
-      {/* Encabezado de navegación */}
-      <Navbar />
+    // <Router>: Componente que permite manejar las rutas de la app desde el navegador
+    <Router>
+      {/* <Routes>: Contenedor de todas las rutas disponibles */}
+      <Routes>
+        {/* Ruta para el inicio ("/"). Muestra el componente Home */}
+        <Route path="/" element={<Home />} />
 
-      {/* Sección Hero (bienvenida visual) */}
-      <Hero /> 
-
-      {/* Sección de características o beneficios */}
-      <Features /> 
-
-      {/* Sección de Contactos */}
-      <Contact />
-
-      {/* Pie de página */}
-      <Footer /> 
-    </div>
+        {/* Ruta para "/simulador". Muestra únicamente el componente Simulator */}
+        <Route path="/simulador" element={<Simulator />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
-export default Home;
+// Exportamos el componente App para que sea usado en el punto de entrada (main.tsx)
+export default App;
