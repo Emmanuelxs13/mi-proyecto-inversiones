@@ -1,19 +1,19 @@
-// import Navbar from "../components/Navbar";
+// Home.tsx
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import Features from "../components/Features";
+import Contact from "../components/Contact";
+import Footer from "../components/Footer";
 
-// Página principal de la app
 const Home = () => {
   return (
-    //<div className="flex flex-col min-h-screen">
-      //{/* Barra de navegación superior */}
-      //<Navbar />
-
-      {/* Sección central provisional */}
-     // <main className="flex-grow flex items-center justify-center">
-       // <h1 className="text-3xl font-bold text-blue-700">
-      //    ¡Bienvenido a Inversiones J.A!
-      //  </h1>
-      //</main>
-   // </div>
+    <div className="flex flex-col min-h-screen bg-white">
+      <Navbar />
+      <Hero />
+      <Features />
+      <Contact />
+      <Footer />
+    </div>
   );
 };
 
