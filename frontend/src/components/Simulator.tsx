@@ -4,6 +4,8 @@
 import React, { useState } from "react"; // Importa React y el hook useState
 import Navbar from "./Navbar"; // Importa el componente de navegación
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts"; // Importa componentes de Recharts para la visualización de datos
+import { exportToPDF, exportToCSV } from "../utils/ExportUtils";
+
 
 const Simulator = () => {
   // Definición de estados para los inputs del formulario
@@ -171,6 +173,25 @@ const Simulator = () => {
                 <p className="text-gray-700">Cuota mensual estimada: <strong>{formatoPesos.format(cuotaMensual)}</strong></p>
                 <p className="text-gray-700">Ganancia estimada: <strong>{formatoPesos.format(ganancia)}</strong></p>
               </div>
+
+              {/* Exportar resultado a PDF o CSV */}
+              <div className="flex justify-center gap-4 mt-6">
+                
+                <button
+                  onClick={() => exportToPDF(capital, cuotaMensual, totalPagar, ganancia, tipo)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+                >
+                  Exportar a PDF
+                </button>
+
+                <button
+                  onClick={() => exportToCSV(capital, cuotaMensual, totalPagar, ganancia, tipo)}
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
+                >
+                  Exportar a CSV
+                </button>
+              </div>
+
 
               {/* Sección de gráfica usando Recharts */}
               <div className="mt-8 bg-white p-6 rounded-md shadow-md">

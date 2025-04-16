@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // Importamos las páginas o vistas que vamos a mostrar en distintas rutas
 import Home from "./pages/Home"; // Página principal o landing page
 import Simulator from "./components/Simulator"; // Página del simulador (vista independiente)
+import Socios from "./pages/Socios";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
 
         {/* Ruta para "/simulador". Muestra únicamente el componente Simulator */}
         <Route path="/simulador" element={<Simulator />} />
+        <Route path="/socios" element={<Socios />} />
       </Routes>
     </Router>
   );

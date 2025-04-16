@@ -56,6 +56,12 @@ const Navbar = () => {
           >
             Simulador
           </Link>
+          <Link
+            to="/socios"
+            className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
+          >
+            Socios
+          </Link>
           <a
             href="#contact"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
@@ -89,6 +95,13 @@ const Navbar = () => {
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
               Simulador
+            </Link>
+            <Link
+              to="/socios"
+              onClick={() => setIsOpen(false)}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              Socios
             </Link>
             <a
               href="#contact"
