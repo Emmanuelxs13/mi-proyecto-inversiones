@@ -1,34 +1,36 @@
 // Socios.tsx
-// Página de gestión de socios con API pública, paginación y modales personalizados para acciones
+// Página de gestión de socios con datos obtenidos desde una API pública con opción de definir la cantidad de registros, paginación y búsqueda por nombre en el frontend
 
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import SociosTable from "../components/SociosTable";
 import { Socio } from "../types/Socio";
-import AddSocioModal from "../components/AddSocioModal"; // Modal para agregar socio
-
 
 const Socios = () => {
-  const [socios, setSocios] = useState<Socio[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [cantidadSocios, setCantidadSocios] = useState<number>(10);
-  const [paginaActual, setPaginaActual] = useState<number>(1);
-  const [modalAbierto, setModalAbierto] = useState(false); // Estado para mostrar/ocultar el modal
+  const [socios, setSocios] = useState<Socio[]>([]); // Lista completa de socios
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [cantidadSocios, setCantidadSocios] = useState<number>(10); // Número total de socios a traer
+  const [paginaActual, setPaginaActual] = useState<number>(1); // Página actual de la paginación
+  const [busqueda, setBusqueda] = useState<string>(""); // Valor del input de búsqueda
 
+  const sociosPorPagina = 10; // Cantidad de socios por página
 
-  const sociosPorPagina = 10;
+  // Calculamos los socios filtrados por búsqueda de nombre
+  const sociosFiltrados = socios.filter((socio) =>
+    socio.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  // Calculamos paginación sobre los socios filtrados
   const indexInicio = (paginaActual - 1) * sociosPorPagina;
   const indexFin = indexInicio + sociosPorPagina;
-  const sociosPaginados = socios.slice(indexInicio, indexFin);
+  const sociosPaginados = sociosFiltrados.slice(indexInicio, indexFin);
 
-  // Estado para manejar el socio activo para ver/editar/eliminar
-  const [socioActivo, setSocioActivo] = useState<Socio | null>(null);
-  const [modal, setModal] = useState<"ver" | "editar" | "eliminar" | null>(null);
-
+  // Fetch al cargar el componente
   useEffect(() => {
     fetchSocios();
   }, []);
 
+  // Carga de datos desde la API pública
   const fetchSocios = async () => {
     setLoading(true);
     try {
@@ -61,52 +63,33 @@ const Socios = () => {
     }
   };
 
-  // Acción: Ver
+  const totalPaginas = Math.ceil(sociosFiltrados.length / sociosPorPagina);
+
+  // Funciones CRUD básicas
   const verSocio = (socio: Socio) => {
-    setSocioActivo(socio);
-    setModal("ver");
+    alert(`Socio: ${socio.nombre}\nEmail: ${socio.correo}\nPaís: ${socio.pais}`);
   };
 
-  // Acción: Editar
   const editarSocio = (socio: Socio) => {
-    setSocioActivo(socio);
-    setModal("editar");
-  };
-
-  // Acción: Eliminar
-  const eliminarSocio = (id: string) => {
-    setSocioActivo(socios.find((s) => s.id === id) || null);
-    setModal("eliminar");
-  };
-
-  // Confirmar eliminación
-  const confirmarEliminar = () => {
-    if (socioActivo) {
-      setSocios((prev) => prev.filter((s) => s.id !== socioActivo.id));
-      cerrarModal();
+    const nuevoNombre = prompt("Editar nombre:", socio.nombre);
+    if (nuevoNombre) {
+      setSocios((prev) =>
+        prev.map((s) => (s.id === socio.id ? { ...s, nombre: nuevoNombre } : s))
+      );
     }
   };
 
-  // Actualizar datos desde modal editar
+  const eliminarSocio = (id: string) => {
+    const confirmar = window.confirm("¿Estás seguro de eliminar este socio?");
+    if (confirmar) {
+      setSocios((prev) => prev.filter((s) => s.id !== id));
+    }
+  };
+
   const actualizarSocio = (socioEditado: Socio) => {
     setSocios((prevSocios) =>
       prevSocios.map((s) => (s.id === socioEditado.id ? socioEditado : s))
     );
-    cerrarModal();
-  };
-
-  // Cerrar cualquier modal
-  const cerrarModal = () => {
-    setModal(null);
-    setSocioActivo(null);
-  };
-
-  const totalPaginas = Math.ceil(socios.length / sociosPorPagina);
-
-  // Función para agregar un nuevo socio al estado
-  const agregarSocio = (nuevoSocio: Socio) => {
-    setSocios((prev) => [nuevoSocio, ...prev]);
-    setModalAbierto(false); // Cerrar el modal
   };
 
   return (
@@ -116,39 +99,39 @@ const Socios = () => {
       <section className="py-12 px-6 max-w-7xl mx-auto animate-fade-in">
         <h1 className="text-3xl font-bold text-blue-700 mb-6">Gestión de Socios</h1>
 
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <label className="mr-2 text-sm font-medium">Cantidad de socios:</label>
-            <input
-              type="number"
-              value={cantidadSocios}
-              min={1}
-              max={1000}
-              onChange={(e) => setCantidadSocios(Number(e.target.value))}
-              className="border rounded px-2 py-1 w-20 text-sm"
-            />
-            <button
-              onClick={fetchSocios}
-              className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-            >
-              Cargar
-            </button>
-          </div>
-          
-          {/* Botón agregar socio */}
+        {/* Filtro de búsqueda por nombre */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Buscar por nombre..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="border px-3 py-1 rounded w-full max-w-sm text-sm"
+          />
+          {/* 🔎 Para agregar otro criterio de búsqueda, como país, se puede extender esta lógica con más campos e incluirlos en el filtro sociosFiltrados */}
+        </div>
+
+        <div className="mb-6">
+          <label className="mr-2 text-sm font-medium">Cantidad de socios:</label>
+          <input
+            type="number"
+            value={cantidadSocios}
+            min={1}
+            max={1000}
+            onChange={(e) => setCantidadSocios(Number(e.target.value))}
+            className="border rounded px-2 py-1 w-20 text-sm"
+          />
           <button
-            onClick={() => setModalAbierto(true)}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+            onClick={fetchSocios}
+            className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
           >
-            + Agregar socio
+            Cargar
           </button>
         </div>
 
-     
-
         {loading ? (
           <p className="text-gray-600">Cargando socios...</p>
-        ) : socios.length > 0 ? (
+        ) : sociosFiltrados.length > 0 ? (
           <>
             <SociosTable
               socios={sociosPaginados}
@@ -177,34 +160,7 @@ const Socios = () => {
             </div>
           </>
         ) : (
-          <p className="text-gray-600">No hay socios disponibles. Ajusta la cantidad y vuelve a cargar.</p>
-        )}
-
-        {/* Modal eliminar */}
-        {modal === "eliminar" && socioActivo && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl animate-fade-in">
-              <h2 className="text-lg font-semibold text-red-600 mb-4">¿Eliminar socio?</h2>
-              <p className="mb-4 text-gray-700">Estás a punto de eliminar a <strong>{socioActivo.nombre}</strong>.</p>
-              <div className="flex justify-end space-x-2">
-                <button
-                  onClick={cerrarModal}
-                  className="px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={confirmarEliminar}
-                  className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                >
-                  Eliminar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        {modalAbierto && (
-          <AddSocioModal onAdd={agregarSocio} onClose={() => setModalAbierto(false)} />
+          <p className="text-gray-600">No hay socios disponibles. Ajusta la cantidad o la búsqueda y vuelve a cargar.</p>
         )}
       </section>
     </div>
