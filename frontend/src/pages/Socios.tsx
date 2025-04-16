@@ -5,12 +5,16 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import SociosTable from "../components/SociosTable";
 import { Socio } from "../types/Socio";
+import AddSocioModal from "../components/AddSocioModal"; // Modal para agregar socio
+
 
 const Socios = () => {
   const [socios, setSocios] = useState<Socio[]>([]);
   const [loading, setLoading] = useState(true);
   const [cantidadSocios, setCantidadSocios] = useState<number>(10);
   const [paginaActual, setPaginaActual] = useState<number>(1);
+  const [modalAbierto, setModalAbierto] = useState(false); // Estado para mostrar/ocultar el modal
+
 
   const sociosPorPagina = 10;
   const indexInicio = (paginaActual - 1) * sociosPorPagina;
@@ -99,6 +103,12 @@ const Socios = () => {
 
   const totalPaginas = Math.ceil(socios.length / sociosPorPagina);
 
+  // Función para agregar un nuevo socio al estado
+  const agregarSocio = (nuevoSocio: Socio) => {
+    setSocios((prev) => [nuevoSocio, ...prev]);
+    setModalAbierto(false); // Cerrar el modal
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -106,23 +116,35 @@ const Socios = () => {
       <section className="py-12 px-6 max-w-7xl mx-auto animate-fade-in">
         <h1 className="text-3xl font-bold text-blue-700 mb-6">Gestión de Socios</h1>
 
-        <div className="mb-6">
-          <label className="mr-2 text-sm font-medium">Cantidad de socios:</label>
-          <input
-            type="number"
-            value={cantidadSocios}
-            min={1}
-            max={1000}
-            onChange={(e) => setCantidadSocios(Number(e.target.value))}
-            className="border rounded px-2 py-1 w-20 text-sm"
-          />
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <label className="mr-2 text-sm font-medium">Cantidad de socios:</label>
+            <input
+              type="number"
+              value={cantidadSocios}
+              min={1}
+              max={1000}
+              onChange={(e) => setCantidadSocios(Number(e.target.value))}
+              className="border rounded px-2 py-1 w-20 text-sm"
+            />
+            <button
+              onClick={fetchSocios}
+              className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+            >
+              Cargar
+            </button>
+          </div>
+          
+          {/* Botón agregar socio */}
           <button
-            onClick={fetchSocios}
-            className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+            onClick={() => setModalAbierto(true)}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
           >
-            Cargar
+            + Agregar socio
           </button>
         </div>
+
+     
 
         {loading ? (
           <p className="text-gray-600">Cargando socios...</p>
@@ -180,6 +202,9 @@ const Socios = () => {
               </div>
             </div>
           </div>
+        )}
+        {modalAbierto && (
+          <AddSocioModal onAdd={agregarSocio} onClose={() => setModalAbierto(false)} />
         )}
       </section>
     </div>

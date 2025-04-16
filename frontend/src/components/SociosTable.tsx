@@ -5,11 +5,13 @@ import React, { useState } from "react";
 import { Socio } from "../types/Socio";
 
 // Definimos los props que recibe el componente
-interface SociosTableProps {
+/* interface SociosTableProps {
   socios: Socio[];
+  onView: (socio: Socio) => void;
+  onEdit: (socio: Socio) => void;
   onDelete: (id: string) => void;
 }
-
+ */
 // Importa useEffect si lo necesitas y asegúrate de recibir esta prop:
 interface SociosTableProps {
   socios: Socio[];
