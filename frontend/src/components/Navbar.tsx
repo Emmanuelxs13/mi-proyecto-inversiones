@@ -44,12 +44,12 @@ const Navbar = () => {
           >
             Inicio
           </Link>
-          <a
-            href="#features"
+          <Link
+            to="/beneficios"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
           >
             Beneficios
-          </a>
+          </Link>
           <Link
             to="/simulador"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
@@ -82,13 +82,13 @@ const Navbar = () => {
             >
               Inicio
             </Link>
-            <a
-              href="#features"
+            <Link
+              to="/beneficios"
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
               Beneficios
-            </a>
+            </Link>
             <Link
               to="/simulador"
               onClick={() => setIsOpen(false)}
