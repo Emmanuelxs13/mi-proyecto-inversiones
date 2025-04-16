@@ -1,37 +1,38 @@
-export interface Socio {
-    id: number;
-    nombre: string;
-    cedula: string;
-    email: string;
-    telefono: string;
-    estado: string;
-  }
-  
-  // Tipo local solo con los datos que vamos a usar del API
-  type RandomUser = {
-    name: { first: string; last: string };
-    email: string;
-    phone: string;
-    id: { value: string | null };
-  };
-  
-  export const getSocios = async (): Promise<Socio[]> => {
-    try {
-      const res = await fetch("https://randomuser.me/api/?results=5&nat=us,co");
-      const data = await res.json();
-  
-      // Aplicamos el tipo RandomUser para mayor control y sin usar 'any'
-      return data.results.map((user: RandomUser, index: number) => ({
-        id: index + 1,
-        nombre: `${user.name.first} ${user.name.last}`,
-        cedula: user.id.value || `10${Math.floor(Math.random() * 100000000)}`,
-        email: user.email,
-        telefono: user.phone,
-        estado: Math.random() > 0.5 ? "Activo" : "Inactivo"
-      }));
-    } catch (error) {
-      console.error("Error al obtener socios:", error);
-      return [];
+// getSocios.tsx
+// Servicio para obtener socios desde la API pública randomuser.me
+// Devuelve una lista de objetos con la estructura definida en el tipo Socio
+
+import { Socio } from "../types/Socio"; // Importamos el tipo Socio
+
+// Función asincrónica para obtener los socios
+export const getSocios = async (cantidad: number = 10): Promise<Socio[]> => {
+  try {
+    // Llamamos a la API pública de randomuser con la cantidad deseada
+    const response = await fetch(`https://randomuser.me/api/?results=${cantidad}`);
+    const data = await response.json();
+
+    // Definimos la forma de los datos que recibimos (de randomuser)
+    interface RandomUser {
+      name: { first: string; last: string };
+      email: string;
+      phone: string;
+      location: { country: string };
+      picture: { thumbnail: string };
     }
-  };
-  
+
+    // Transformamos los datos al formato Socio
+    const sociosFormateados: Socio[] = data.results.map((user: RandomUser, index: number) => ({
+      id: `${index + 1}`, // Generamos un ID simple
+      nombre: `${user.name.first} ${user.name.last}`, // Unimos nombre y apellido
+      correo: user.email, // Correo electrónico
+      telefono: user.phone, // Número telefónico
+      pais: user.location.country, // País
+      foto: user.picture.thumbnail, // URL de la foto
+    }));
+
+    return sociosFormateados; // Devolvemos la lista
+  } catch (error) {
+    console.error("Error al obtener los socios:", error);
+    return []; // En caso de error, devolvemos un arreglo vacío
+  }
+};
