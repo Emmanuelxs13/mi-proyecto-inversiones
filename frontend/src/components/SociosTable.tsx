@@ -1,42 +1,31 @@
 // SociosTable.tsx
-// Componente de tabla que muestra la lista de socios con acciones: Ver, Editar y Eliminar en modales simples personalizados (sin shadcn/ui)
+// Componente de tabla que muestra la lista de socios con acciones: Ver, Editar, Eliminar y Crear en modales personalizados sin librerías externas
 
 import React, { useState } from "react";
 import { Socio } from "../types/Socio";
 
-// Definimos los props que recibe el componente
-/* interface SociosTableProps {
-  socios: Socio[];
-  onView: (socio: Socio) => void;
-  onEdit: (socio: Socio) => void;
-  onDelete: (id: string) => void;
-}
- */
-// Importa useEffect si lo necesitas y asegúrate de recibir esta prop:
+// Props que recibe el componente
 interface SociosTableProps {
   socios: Socio[];
   onDelete: (id: string) => void;
-  onEdit: (socioActualizado: Socio) => void; // 🆕 Nueva función para actualizar socio
+  onEdit: (socioActualizado: Socio) => void;
+  onAdd: (nuevoSocio: Socio) => void;
 }
 
-const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete }) => {
-  // Control del tipo de modal abierto: "ver", "editar" o "eliminar"
-  const [modal, setModal] = useState<"ver" | "editar" | "eliminar" | null>(null);
-  const [socioActivo, setSocioActivo] = useState<Socio | null>(null); // Socio actual seleccionado
+const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onAdd }) => {
+  const [modal, setModal] = useState<"ver" | "editar" | "eliminar" | "crear" | null>(null);
+  const [socioActivo, setSocioActivo] = useState<Socio | null>(null);
 
-  // Abre el modal correspondiente con el socio seleccionado
-  const abrirModal = (tipo: "ver" | "editar" | "eliminar", socio: Socio) => {
-    setSocioActivo(socio);
+  const abrirModal = (tipo: "ver" | "editar" | "eliminar" | "crear", socio?: Socio) => {
+    setSocioActivo(socio || null);
     setModal(tipo);
   };
 
-  // Cierra cualquier modal abierto
   const cerrarModal = () => {
     setModal(null);
     setSocioActivo(null);
   };
 
-  // Función que ejecuta la eliminación y cierra el modal
   const confirmarEliminacion = () => {
     if (socioActivo) {
       onDelete(socioActivo.id);
@@ -46,6 +35,15 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete }) => {
 
   return (
     <div className="overflow-x-auto relative">
+      <div className="flex justify-end mb-4">
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
+          onClick={() => abrirModal("crear")}
+        >
+          + Crear nuevo socio
+        </button>
+      </div>
+
       <table className="min-w-full border divide-y divide-gray-200">
         <thead className="bg-blue-600 text-white">
           <tr>
@@ -92,8 +90,47 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete }) => {
         </tbody>
       </table>
 
-      {/* Modal Ver */}
-      {modal === "ver" && socioActivo && (
+      {/* Modal Crear */}
+      {modal === "crear" && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl animate-fade-in">
+            <h2 className="text-lg font-semibold text-green-600 mb-4">Nuevo Socio</h2>
+            <input id="nombre" className="w-full border rounded px-3 py-2 mb-2" placeholder="Nombre" />
+            <input id="correo" className="w-full border rounded px-3 py-2 mb-2" placeholder="Correo" />
+            <input id="telefono" className="w-full border rounded px-3 py-2 mb-2" placeholder="Teléfono" />
+            <input id="pais" className="w-full border rounded px-3 py-2 mb-2" placeholder="País" />
+            <input id="foto" className="w-full border rounded px-3 py-2 mb-2" placeholder="URL Foto" />
+            <div className="flex justify-between">
+              <button
+                className="mt-2 px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                onClick={cerrarModal}
+              >
+                Cancelar
+              </button>
+              <button
+                className="mt-2 px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                onClick={() => {
+                  const nuevoSocio: Socio = {
+                    id: crypto.randomUUID(),
+                    nombre: (document.getElementById("nombre") as HTMLInputElement).value,
+                    correo: (document.getElementById("correo") as HTMLInputElement).value,
+                    telefono: (document.getElementById("telefono") as HTMLInputElement).value,
+                    pais: (document.getElementById("pais") as HTMLInputElement).value,
+                    foto: (document.getElementById("foto") as HTMLInputElement).value,
+                  };
+                  onAdd(nuevoSocio);
+                  cerrarModal();
+                }}
+              >
+                Crear
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+       {/* Modal Ver */}
+       {modal === "ver" && socioActivo && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl animate-fade-in">
             <h2 className="text-lg font-semibold text-blue-700 mb-4">Información del Socio</h2>

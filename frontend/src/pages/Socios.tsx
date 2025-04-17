@@ -37,6 +37,14 @@ const Socios = () => {
       const response = await fetch(`https://randomuser.me/api/?results=${cantidadSocios}`);
       const data = await response.json();
 
+      interface SociosTableProps {
+        socios: Socio[];
+        onDelete: (id: string) => void;
+        onEdit: (socioActualizado: Socio) => void;
+        onAdd: () => void; // ✅ nueva función para crear socio
+      }
+      
+
       interface RandomUser {
         name: { first: string; last: string };
         email: string;
@@ -92,6 +100,20 @@ const Socios = () => {
     );
   };
 
+  const crearSocio = () => {
+    const nuevoSocio: Socio = {
+      id: crypto.randomUUID(), // o usar Date.now().toString()
+      nombre: "Nuevo Socio",
+      correo: "correo@ejemplo.com",
+      telefono: "000-000-0000",
+      pais: "Colombia",
+      foto: "https://via.placeholder.com/48",
+    };
+  
+    setSocios((prev) => [nuevoSocio, ...prev]);
+  };
+  
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -128,6 +150,16 @@ const Socios = () => {
             Cargar
           </button>
         </div>
+
+        {/* <div className="mb-4 flex justify-end">
+        <button
+          onClick={crearSocio}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
+        >
+          + Crear nuevo socio
+        </button>
+      </div> */}
+
 
         {loading ? (
           <p className="text-gray-600">Cargando socios...</p>
