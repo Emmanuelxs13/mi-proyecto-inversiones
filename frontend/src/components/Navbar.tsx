@@ -57,6 +57,13 @@ const Navbar = () => {
             Simulador
           </Link>
           <Link
+            to="/historial"
+            className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
+          >
+            Historial
+          </Link>
+
+          <Link
             to="/socios"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
           >
