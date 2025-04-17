@@ -58,6 +58,22 @@ const Simulator = () => {
     { name: "Total a pagar", valor: totalPagar },
   ];
 
+  // Guardar en historial (localStorage)
+const simulacion = {
+  tipo,
+  capital,
+  interes,
+  plazo,
+  cuotaMensual,
+  totalPagar,
+  ganancia,
+  fecha: new Date().toLocaleString("es-CO"),
+};
+
+const historial = JSON.parse(localStorage.getItem("historial_simulaciones") || "[]");
+historial.push(simulacion);
+localStorage.setItem("historial_simulaciones", JSON.stringify(historial));
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />

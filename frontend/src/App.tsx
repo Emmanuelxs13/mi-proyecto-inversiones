@@ -10,6 +10,7 @@ import Home from "./pages/Home"; // Página principal o landing page
 import Simulator from "./pages/Simulator"; // Página del simulador (vista independiente)
 import Socios from "./pages/Socios";
 import Beneficios from "./components/Beneficios";
+import HistorialSimulaciones from "./pages/HistorialSimulaciones";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/simulador" element={<Simulator />} />
         <Route path="/socios" element={<Socios />} />
         <Route path="/beneficios" element={<Beneficios />} />
+        <Route path="/historial" element={<HistorialSimulaciones />} />
       </Routes>
     </Router>
   );
