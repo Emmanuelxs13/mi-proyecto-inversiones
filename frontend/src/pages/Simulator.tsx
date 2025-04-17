@@ -1,5 +1,5 @@
 // Simulator.tsx
-// Página del simulador de inversión con cálculos, exportación a PDF/CSV y visualización de resultados
+// Página del simulador de inversión funcional con validaciones finales y control de errores
 
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
@@ -12,9 +12,9 @@ const Simulator = () => {
   const [plazo, setPlazo] = useState<number>(0);
   const [tipo, setTipo] = useState<string>("Provisional");
 
-  const [capitalError, setCapitalError] = useState(false);
-  const [interesError, setInteresError] = useState(false);
-  const [plazoError, setPlazoError] = useState(false);
+  const [capitalError, setCapitalError] = useState("");
+  const [interesError, setInteresError] = useState("");
+  const [plazoError, setPlazoError] = useState("");
 
   const formatoPesos = new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -27,6 +27,7 @@ const Simulator = () => {
   let cuotaMensual = 0;
   let totalPagar = 0;
   let ganancia = 0;
+
   const interesMensual = interes / 12 / 100;
 
   if (capital > 0 && interes > 0 && plazo > 0) {
@@ -38,11 +39,11 @@ const Simulator = () => {
         ganancia = totalPagar - capital;
         break;
       case "Rotativo":
-        totalPagar = capital + capital * interesMensual * plazo;
+        totalPagar = capital + (capital * interesMensual * plazo);
         cuotaMensual = totalPagar / plazo;
         ganancia = totalPagar - capital;
         break;
-      case "Fidelidad":{
+      case "Fidelidad": {
         const tasaPreferencial = interesMensual * 0.8;
         cuotaMensual = (capital * tasaPreferencial) / (1 - Math.pow(1 + tasaPreferencial, -plazo));
         totalPagar = cuotaMensual * plazo;
@@ -58,21 +59,22 @@ const Simulator = () => {
     { name: "Total a pagar", valor: totalPagar },
   ];
 
-  // Guardar en historial (localStorage)
-const simulacion = {
-  tipo,
-  capital,
-  interes,
-  plazo,
-  cuotaMensual,
-  totalPagar,
-  ganancia,
-  fecha: new Date().toLocaleString("es-CO"),
-};
-
-const historial = JSON.parse(localStorage.getItem("historial_simulaciones") || "[]");
-historial.push(simulacion);
-localStorage.setItem("historial_simulaciones", JSON.stringify(historial));
+  const validar = () => {
+    let valido = true;
+    if (capital <= 0) {
+      setCapitalError("El capital debe ser mayor a 0");
+      valido = false;
+    }
+    if (interes <= 0 || interes > 100) {
+      setInteresError("El interés debe ser entre 0.1 y 100");
+      valido = false;
+    }
+    if (plazo <= 0 || plazo > 360) {
+      setPlazoError("El plazo debe estar entre 1 y 360 meses");
+      valido = false;
+    }
+    return valido;
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -85,7 +87,7 @@ localStorage.setItem("historial_simulaciones", JSON.stringify(historial));
             <p className="text-gray-600 mt-2">Calcula tus ganancias estimadas según los parámetros de inversión.</p>
           </div>
 
-          <form className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+          <form className="grid gap-6 sm:grid-cols-2 md:grid-cols-4" onSubmit={(e) => e.preventDefault()}>
             <div>
               <label className="block text-sm font-medium text-gray-700">Capital ($)</label>
               <input
@@ -95,15 +97,15 @@ localStorage.setItem("historial_simulaciones", JSON.stringify(historial));
                 onChange={(e) => {
                   const value = e.target.value.replace(/\./g, "").replace(/[^0-9]/g, "");
                   setCapital(Number(value));
-                  setCapitalError(false);
+                  setCapitalError("");
                 }}
                 onBlur={() => {
-                  if (capital <= 0) setCapitalError(true);
+                  if (capital <= 0) setCapitalError("El capital es obligatorio.");
                 }}
                 placeholder="Ingrese monto"
                 className={`mt-1 w-full border ${capitalError ? "border-red-500" : "border-gray-300"} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
               />
-              {capitalError && <p className="text-red-500 text-sm mt-1">El capital es obligatorio.</p>}
+              {capitalError && <p className="text-red-500 text-sm mt-1">{capitalError}</p>}
             </div>
 
             <div>
@@ -115,15 +117,15 @@ localStorage.setItem("historial_simulaciones", JSON.stringify(historial));
                 onChange={(e) => {
                   const value = e.target.value.replace(/\./g, "").replace(/[^0-9]/g, "");
                   setInteres(Number(value));
-                  setInteresError(false);
+                  setInteresError("");
                 }}
                 onBlur={() => {
-                  if (interes <= 0) setInteresError(true);
+                  if (interes <= 0) setInteresError("El interés es obligatorio.");
                 }}
                 placeholder="Ej: 12"
                 className={`mt-1 w-full border ${interesError ? "border-red-500" : "border-gray-300"} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
               />
-              {interesError && <p className="text-red-500 text-sm mt-1">El interés es obligatorio.</p>}
+              {interesError && <p className="text-red-500 text-sm mt-1">{interesError}</p>}
             </div>
 
             <div>
@@ -135,15 +137,15 @@ localStorage.setItem("historial_simulaciones", JSON.stringify(historial));
                 onChange={(e) => {
                   const value = e.target.value.replace(/\./g, "").replace(/[^0-9]/g, "");
                   setPlazo(Number(value));
-                  setPlazoError(false);
+                  setPlazoError("");
                 }}
                 onBlur={() => {
-                  if (plazo <= 0) setPlazoError(true);
+                  if (plazo <= 0) setPlazoError("El plazo es obligatorio.");
                 }}
                 placeholder="Ej: 12"
                 className={`mt-1 w-full border ${plazoError ? "border-red-500" : "border-gray-300"} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
               />
-              {plazoError && <p className="text-red-500 text-sm mt-1">El plazo es obligatorio.</p>}
+              {plazoError && <p className="text-red-500 text-sm mt-1">{plazoError}</p>}
             </div>
 
             <div>
@@ -161,7 +163,7 @@ localStorage.setItem("historial_simulaciones", JSON.stringify(historial));
             </div>
           </form>
 
-          {capital > 0 && interes > 0 && plazo > 0 && (
+          {capital > 0 && interes > 0 && plazo > 0 && !capitalError && !interesError && !plazoError && (
             <>
               <div className="mt-12 text-center bg-blue-50 p-6 rounded-md shadow-md">
                 <h3 className="text-xl font-semibold text-blue-700 mb-4">Resumen del Crédito ({tipo})</h3>
