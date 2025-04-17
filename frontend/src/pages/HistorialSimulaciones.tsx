@@ -1,10 +1,10 @@
 // HistorialSimulaciones.tsx
-// Página que muestra el historial de simulaciones guardadas desde localStorage
+// Página que muestra el historial de simulaciones con filtro por fechas
 
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 
-// Tipo de datos de una simulación
+// Tipo de datos para cada simulación
 interface Simulacion {
   tipo: string;
   capital: number;
@@ -13,7 +13,7 @@ interface Simulacion {
   cuotaMensual: number;
   totalPagar: number;
   ganancia: number;
-  fecha: string;
+  fecha: string; 
 }
 
 const formatoPesos = new Intl.NumberFormat("es-CO", {
@@ -24,8 +24,10 @@ const formatoPesos = new Intl.NumberFormat("es-CO", {
 
 const HistorialSimulaciones = () => {
   const [simulaciones, setSimulaciones] = useState<Simulacion[]>([]);
+  const [desde, setDesde] = useState(""); // fecha desde (input)
+  const [hasta, setHasta] = useState(""); // fecha hasta (input)
 
-  // Al cargar el componente, leemos el historial desde localStorage
+  // Al cargar el componente, trae los datos del localStorage
   useEffect(() => {
     const dataGuardada = localStorage.getItem("historial_simulaciones");
     if (dataGuardada) {
@@ -33,15 +35,51 @@ const HistorialSimulaciones = () => {
     }
   }, []);
 
+  // Filtrar por rango de fechas
+  const simulacionesFiltradas = simulaciones.filter((sim) => {
+    const fechaSim = new Date(sim.fecha); // Convertir texto a Date
+    const desdeFecha = desde ? new Date(desde) : null;
+    const hastaFecha = hasta ? new Date(hasta) : null;
+
+    // Comparar solo si se ha ingresado una fecha válida
+    const cumpleDesde = !desdeFecha || fechaSim >= desdeFecha;
+    const cumpleHasta = !hastaFecha || fechaSim <= hastaFecha;
+
+    return cumpleDesde && cumpleHasta;
+  });
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      <section className="py-12 px-6 max-w-5xl mx-auto animate-fade-in">
+      <section className="py-12 px-6 max-w-6xl mx-auto animate-fade-in">
         <h1 className="text-3xl font-bold text-blue-700 mb-6">Historial de Simulaciones</h1>
 
-        {simulaciones.length === 0 ? (
-          <p className="text-gray-600">No hay simulaciones guardadas aún.</p>
+        {/* Filtros de fechas */}
+        <div className="flex flex-wrap gap-4 items-center mb-6">
+          <div>
+            <label className="block text-sm text-gray-600">Desde:</label>
+            <input
+              type="date"
+              value={desde}
+              onChange={(e) => setDesde(e.target.value)}
+              className="border rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">Hasta:</label>
+            <input
+              type="date"
+              value={hasta}
+              onChange={(e) => setHasta(e.target.value)}
+              className="border rounded px-2 py-1"
+            />
+          </div>
+        </div>
+
+        {/* Tabla de resultados */}
+        {simulacionesFiltradas.length === 0 ? (
+          <p className="text-gray-600">No hay simulaciones en este rango de fechas.</p>
         ) : (
           <div className="overflow-x-auto border rounded shadow">
             <table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -58,7 +96,7 @@ const HistorialSimulaciones = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {simulaciones.map((sim, i) => (
+                {simulacionesFiltradas.map((sim, i) => (
                   <tr key={i} className="hover:bg-gray-50">
                     <td className="px-4 py-2">{sim.fecha}</td>
                     <td className="px-4 py-2">{sim.tipo}</td>
