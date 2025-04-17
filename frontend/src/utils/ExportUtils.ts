@@ -3,6 +3,7 @@
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Simulacion } from "../types/Simulacion"; // Asegúrate que la ruta sea correcta
 
 // Formateador para COP
 const formatoPesos = new Intl.NumberFormat("es-CO", {
@@ -51,6 +52,62 @@ export const exportToCSV = (capital: number, cuota: number, total: number, ganan
 
   link.setAttribute("href", url);
   link.setAttribute("download", `simulador-${tipo}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
+//Historial ded Simulaciones
+// Exportar historial completo a PDF
+// src/utils/ExportUtils.ts
+
+export const exportHistorialToPDF = (historial: Simulacion[]) => {
+  const doc = new jsPDF();
+  doc.setFontSize(16);
+  doc.text("Historial de Simulaciones", 14, 20);
+
+  const filas = historial.map((sim) => [
+    sim.fecha,
+    sim.tipo,
+    formatoPesos.format(sim.capital),
+    `${sim.interes}%`,
+    formatoPesos.format(sim.cuotaMensual),
+    formatoPesos.format(sim.totalPagar),
+    formatoPesos.format(sim.ganancia),
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [["Fecha", "Tipo", "Capital", "Interés", "Cuota", "Total", "Ganancia"]],
+    body: filas,
+  });
+
+  doc.save("historial-simulaciones.pdf");
+};
+
+export const exportHistorialToCSV = (historial: Simulacion[]) => {
+  const encabezados = ["Fecha", "Tipo", "Capital", "Interés", "Cuota", "Total", "Ganancia"];
+  const filas = historial.map(sim =>
+    [
+      sim.fecha,
+      sim.tipo,
+      formatoCSV(sim.capital),
+      `${sim.interes}`,
+      formatoCSV(sim.cuotaMensual),
+      formatoCSV(sim.totalPagar),
+      formatoCSV(sim.ganancia)
+    ].join(",")
+  );
+
+  const csv = [encabezados.join(","), ...filas].join("\n");
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+
+  link.setAttribute("href", url);
+  link.setAttribute("download", "historial-simulaciones.csv");
   link.style.visibility = 'hidden';
   document.body.appendChild(link);
   link.click();
