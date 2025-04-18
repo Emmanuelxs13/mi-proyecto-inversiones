@@ -1,10 +1,9 @@
-
 // Página de historial de simulaciones con exportación a PDF y CSV
 
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { exportHistorialToPDF, exportHistorialToCSV } from "../utils/ExportUtils";
-import { Simulacion } from "../types/Simulacion"; // Asegúrate que la ruta sea correcta
+import { Simulacion } from "../types/Simulacion";
 
 const formatoPesos = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -12,6 +11,7 @@ const formatoPesos = new Intl.NumberFormat("es-CO", {
   minimumFractionDigits: 2,
 });
 
+// Datos simulados iniciales
 const historialInicial: Simulacion[] = [
   {
     id: 1,
@@ -48,7 +48,9 @@ const historialInicial: Simulacion[] = [
 const SimulatorHistory = () => {
   const [historial] = useState<Simulacion[]>(historialInicial);
   const [filtroFecha, setFiltroFecha] = useState<string>("");
+  const [vista, setVista] = useState<"tabla" | "tarjetas">("tarjetas"); // Estado de vista
 
+  // Historial filtrado por fecha si aplica
   const historialFiltrado = filtroFecha
     ? historial.filter((sim) => sim.fecha === filtroFecha)
     : historial;
@@ -61,55 +63,100 @@ const SimulatorHistory = () => {
         <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Historial de Simulaciones</h1>
 
         {/* Filtro por fecha */}
-        <div className="mb-6 flex items-center gap-4">
-          <label className="text-sm font-medium">Filtrar por fecha:</label>
-          <input
-            type="date"
-            value={filtroFecha}
-            onChange={(e) => setFiltroFecha(e.target.value)}
-            className="border rounded px-3 py-1 text-sm"
-          />
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Filtrar por fecha:</label>
+            <input
+              type="date"
+              value={filtroFecha}
+              onChange={(e) => setFiltroFecha(e.target.value)}
+              className="border rounded px-3 py-1 text-sm"
+            />
+          </div>
+
+          {/* Alternador de vista */}
+          <div className="flex gap-2">
+            <button
+              className={`px-4 py-1 rounded text-sm border ${
+                vista === "tabla" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"
+              }`}
+              onClick={() => setVista("tabla")}
+            >
+              Tabla
+            </button>
+            <button
+              className={`px-4 py-1 rounded text-sm border ${
+                vista === "tarjetas" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"
+              }`}
+              onClick={() => setVista("tarjetas")}
+            >
+              Tarjetas
+            </button>
+          </div>
         </div>
 
-        {/* Tabla de historial */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full border divide-y divide-gray-200 text-sm">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2">Fecha</th>
-                <th className="px-4 py-2">Tipo</th>
-                <th className="px-4 py-2">Capital</th>
-                <th className="px-4 py-2">Interés</th>
-                <th className="px-4 py-2">Cuota Mensual</th>
-                <th className="px-4 py-2">Total a Pagar</th>
-                <th className="px-4 py-2">Ganancia</th>
-              </tr>
-            </thead>
-            <tbody>
-              {historialFiltrado.map((sim) => (
-                <tr key={sim.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2">{sim.fecha}</td>
-                  <td className="px-4 py-2">{sim.tipo}</td>
-                  <td className="px-4 py-2">{formatoPesos.format(sim.capital)}</td>
-                  <td className="px-4 py-2">{sim.interes}%</td>
-                  <td className="px-4 py-2">{formatoPesos.format(sim.cuotaMensual)}</td>
-                  <td className="px-4 py-2">{formatoPesos.format(sim.totalPagar)}</td>
-                  <td className="px-4 py-2">{formatoPesos.format(sim.ganancia)}</td>
+        {/* Vista de Tabla o Tarjetas */}
+        {vista === "tabla" ? (
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border divide-y divide-gray-300">
+              <thead className="bg-blue-600 text-white text-sm">
+                <tr>
+                  <th className="px-4 py-2 text-left">Fecha</th>
+                  <th className="px-4 py-2 text-left">Tipo</th>
+                  <th className="px-4 py-2 text-left">Capital</th>
+                  <th className="px-4 py-2 text-left">Interés anual</th>
+                  <th className="px-4 py-2 text-left">Cuota mensual</th>
+                  <th className="px-4 py-2 text-left">Total a pagar</th>
+                  <th className="px-4 py-2 text-left">Ganancia</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="text-sm divide-y divide-gray-200">
+                {historialFiltrado.map((sim) => (
+                  <tr key={sim.id}>
+                    <td className="px-4 py-2">{new Date(sim.fecha).toLocaleDateString()}</td>
+                    <td className="px-4 py-2">{sim.tipo}</td>
+                    <td className="px-4 py-2">{formatoPesos.format(sim.capital)}</td>
+                    <td className="px-4 py-2">{sim.interes}%</td>
+                    <td className="px-4 py-2">{formatoPesos.format(sim.cuotaMensual)}</td>
+                    <td className="px-4 py-2">{formatoPesos.format(sim.totalPagar)}</td>
+                    <td className="px-4 py-2">{formatoPesos.format(sim.ganancia)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {historialFiltrado.map((sim) => (
+              <div
+                key={sim.id}
+                className="bg-white border rounded-lg shadow-md p-6 transition hover:shadow-lg"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-lg font-semibold text-blue-700">
+                    {sim.tipo} - {new Date(sim.fecha).toLocaleDateString()}
+                  </h3>
+                </div>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p><strong>Capital:</strong> {formatoPesos.format(sim.capital)}</p>
+                  <p><strong>Interés anual:</strong> {sim.interes}%</p>
+                  <p><strong>Cuota mensual:</strong> {formatoPesos.format(sim.cuotaMensual)}</p>
+                  <p><strong>Total a pagar:</strong> {formatoPesos.format(sim.totalPagar)}</p>
+                  <p><strong>Ganancia:</strong> {formatoPesos.format(sim.ganancia)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Botones de exportación */}
-        <div className="flex justify-center mt-6 gap-4">
+        <div className="flex justify-center mt-10 gap-4">
           <button
             onClick={() => exportHistorialToPDF(historialFiltrado)}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
           >
             Exportar a PDF
           </button>
-
           <button
             onClick={() => exportHistorialToCSV(historialFiltrado)}
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
