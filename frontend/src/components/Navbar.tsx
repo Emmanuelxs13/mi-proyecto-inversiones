@@ -69,12 +69,12 @@ const Navbar = () => {
           >
             Socios
           </Link>
-          <a
-            href="#contact"
-            className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
-          >
-            Contacto
-          </a>
+          <Link
+              to="/contacto"
+              className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
+            >
+              Contacto
+            </Link>
         </nav>
       </div>
 
@@ -110,13 +110,13 @@ const Navbar = () => {
             >
               Socios
             </Link>
-            <a
-              href="#contact"
+            <Link
+              to="/contacto"
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
               Contacto
-            </a>
+            </Link>
           </nav>
         </div>
       )}

@@ -11,6 +11,7 @@ import Simulator from "./pages/Simulator"; // Página del simulador (vista indep
 import Socios from "./pages/Socios";
 import Beneficios from "./components/Beneficios";
 import HistorialSimulaciones from "./pages/HistorialSimulaciones";
+import Contacto from "./components/Contact";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/socios" element={<Socios />} />
         <Route path="/beneficios" element={<Beneficios />} />
         <Route path="/historial" element={<HistorialSimulaciones />} />
+        <Route path="/contacto" element={<Contacto />} />
       </Routes>
     </Router>
   );
