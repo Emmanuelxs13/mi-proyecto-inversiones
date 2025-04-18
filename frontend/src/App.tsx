@@ -12,6 +12,7 @@ import Socios from "./pages/Socios";
 import Beneficios from "./components/Beneficios";
 import HistorialSimulaciones from "./pages/HistorialSimulaciones";
 import Contacto from "./components/Contact";
+import Estadisticas from "./pages/Estadisticas";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/beneficios" element={<Beneficios />} />
         <Route path="/historial" element={<HistorialSimulaciones />} />
         <Route path="/contacto" element={<Contacto />} />
+        <Route path="/estadisticas" element={<Estadisticas />} />
       </Routes>
     </Router>
   );
