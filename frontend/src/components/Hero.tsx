@@ -3,6 +3,8 @@
 // Prioriza experiencia de usuario, accesibilidad y diseño responsivo
 
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 const Hero = () => {
   return (
@@ -22,12 +24,12 @@ const Hero = () => {
         </p>
 
         {/* Botón de llamado a la acción */}
-        <a
-          href="#features"
+        <Link
+          to="/simulador"
           className="inline-block bg-primary hover:bg-blue-200 text-sky-900 font-medium py-3 px-6 rounded-lg shadow transition duration-300"
         >
           Comenzar ahora
-        </a>
+        </Link>
       </div>
     </section>
   );

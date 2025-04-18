@@ -53,15 +53,15 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
 
       {/* Vista tipo tabla */}
       {vista === "tabla" && (
-        <table className="min-w-full border divide-y divide-gray-200">
+         <table className="min-w-full border divide-y divide-gray-200 text-sm">
           <thead className="bg-blue-600 text-white">
             <tr>
-              <th className="px-4 py-2 text-left text-sm font-semibold">Foto</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">Nombre</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">Correo</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">Teléfono</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">País</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">Acciones</th>
+              <th className="px-4 py-2 text-left font-semibold">Foto</th>
+              <th className="px-4 py-2 text-left font-semibold">Nombre</th>
+              <th className="px-4 py-2 text-left font-semibold">Correo</th>
+              <th className="px-4 py-2 text-left font-semibold">Teléfono</th>
+              <th className="px-4 py-2 text-left font-semibold">País</th>
+              <th className="px-4 py-2 text-left font-semibold">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -70,26 +70,26 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
                 <td className="px-4 py-2">
                   <img src={socio.foto} alt="Foto" className="w-10 h-10 rounded-full" />
                 </td>
-                <td className="px-4 py-2 text-sm text-gray-800">{socio.nombre}</td>
-                <td className="px-4 py-2 text-sm text-gray-600">{socio.correo}</td>
-                <td className="px-4 py-2 text-sm text-gray-600">{socio.telefono}</td>
-                <td className="px-4 py-2 text-sm text-gray-600">{socio.pais}</td>
-                <td className="px-4 py-2 space-x-2">
+                <td className="px-4 py-2 text-gray-800">{socio.nombre}</td>
+                <td className="px-4 py-2 text-gray-600">{socio.correo}</td>
+                <td className="px-4 py-2 text-gray-600">{socio.telefono}</td>
+                <td className="px-4 py-2 text-gray-600">{socio.pais}</td>
+                <td className="px-4 py-2 space-x-2 whitespace-nowrap">
                   <button
                     onClick={() => abrirModal("ver", socio)}
-                    className="text-sm px-3 py-1 border rounded text-blue-600 border-blue-600 hover:bg-blue-50"
+                    className="px-3 py-1 border rounded text-blue-600 border-blue-600 hover:bg-blue-50"
                   >
                     Ver
                   </button>
                   <button
                     onClick={() => abrirModal("editar", socio)}
-                    className="text-sm px-3 py-1 border rounded text-yellow-600 border-yellow-600 hover:bg-yellow-50"
+                    className="px-3 py-1 border rounded text-yellow-600 border-yellow-600 hover:bg-yellow-50"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => abrirModal("eliminar", socio)}
-                    className="text-sm px-3 py-1 border rounded text-red-600 border-red-600 hover:bg-red-50"
+                    className="px-3 py-1 border rounded text-red-600 border-red-600 hover:bg-red-50"
                   >
                     Eliminar
                   </button>

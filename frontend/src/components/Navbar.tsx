@@ -45,10 +45,10 @@ const Navbar = () => {
             Inicio
           </Link>
           <Link
-            to="/beneficios"
+            to="/estadisticas"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
           >
-            Beneficios
+            Estadísticas
           </Link>
           <Link
             to="/simulador"
@@ -90,11 +90,11 @@ const Navbar = () => {
               Inicio
             </Link>
             <Link
-              to="/beneficios"
+              to="/estadisticas"
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
-              Beneficios
+              Inicio
             </Link>
             <Link
               to="/simulador"
@@ -102,6 +102,13 @@ const Navbar = () => {
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
               Simulador
+            </Link>
+            <Link
+              to="/historial"
+              onClick={() => setIsOpen(false)}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              Historial
             </Link>
             <Link
               to="/socios"
