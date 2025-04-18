@@ -44,12 +44,7 @@ const Navbar = () => {
           >
             Inicio
           </Link>
-          <Link
-            to="/beneficios"
-            className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
-          >
-            Beneficios
-          </Link>
+          
           <Link
             to="/simulador"
             className="text-gray-700 hover:text-blue-600 font-medium transition duration-200"
@@ -89,19 +84,20 @@ const Navbar = () => {
             >
               Inicio
             </Link>
-            <Link
-              to="/beneficios"
-              onClick={() => setIsOpen(false)}
-              className="text-gray-700 hover:text-blue-600 font-medium transition"
-            >
-              Beneficios
-            </Link>
+           
             <Link
               to="/simulador"
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
               Simulador
+            </Link>
+            <Link
+              to="/historial"
+              onClick={() => setIsOpen(false)}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              Historial
             </Link>
             <Link
               to="/socios"

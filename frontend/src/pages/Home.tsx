@@ -2,6 +2,7 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
+import Beneficios  from "../components/Beneficios";
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
       <main className="flex-grow">
         <Navbar />
         <Hero />
+        <Beneficios />
       </main>
       
       <Footer />
