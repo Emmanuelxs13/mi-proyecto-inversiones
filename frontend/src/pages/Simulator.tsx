@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { exportToPDF, exportToCSV } from "../utils/ExportUtils";
+import { FaFilePdf, FaFileCsv } from "react-icons/fa";
 
 const Simulator = () => {
   const [capital, setCapital] = useState<number>(0);
@@ -59,7 +60,7 @@ const Simulator = () => {
     { name: "Total a pagar", valor: totalPagar },
   ];
 
-  const validar = () => {
+/*   const validar = () => {
     let valido = true;
     if (capital <= 0) {
       setCapitalError("El capital debe ser mayor a 0");
@@ -74,7 +75,7 @@ const Simulator = () => {
       valido = false;
     }
     return valido;
-  };
+  }; */
 
   return (
     <div className="min-h-screen bg-white">
@@ -172,18 +173,23 @@ const Simulator = () => {
                 <p className="text-gray-700">Ganancia estimada: <strong>{formatoPesos.format(ganancia)}</strong></p>
               </div>
 
-              <div className="flex justify-center gap-4 mt-6">
+              <div className="flex flex-col md:flex-row justify-center gap-4 mt-6">
                 <button
                   onClick={() => exportToPDF(capital, cuotaMensual, totalPagar, ganancia, tipo)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+                  className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md shadow transition"
+                  title="Exportar a PDF"
                 >
-                  Exportar a PDF
+                  <FaFilePdf className="text-lg" />
+                  PDF
                 </button>
+
                 <button
                   onClick={() => exportToCSV(capital, cuotaMensual, totalPagar, ganancia, tipo)}
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
+                  className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md shadow transition"
+                  title="Exportar a CSV"
                 >
-                  Exportar a CSV
+                  <FaFileCsv className="text-lg" />
+                  CSV
                 </button>
               </div>
 
