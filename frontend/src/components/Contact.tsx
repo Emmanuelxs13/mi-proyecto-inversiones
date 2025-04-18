@@ -1,6 +1,7 @@
 // src/pages/Contacto.tsx
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Contacto = () => {
   return (
@@ -46,6 +47,8 @@ const Contacto = () => {
           </div>
         </form>
       </section>
+
+      <Footer />
     </div>
   );
 };
