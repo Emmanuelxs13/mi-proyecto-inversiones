@@ -16,9 +16,9 @@ const Footer = () => {
 
         {/* Enlaces rápidos (anclas internas) */}
         <nav className="mt-4 flex justify-center gap-6 text-sm">
-          <a href="#hero" className="hover:text-blue-600 transition duration-300 ease-in-out">Inicio</a>
+          {/* <a href="#hero" className="hover:text-blue-600 transition duration-300 ease-in-out">Inicio</a>
           <a href="#features" className="hover:text-blue-600 transition duration-300 ease-in-out">Beneficios</a>
-          <a href="#contact" className="hover:text-blue-600 transition duration-300 ease-in-out">Contacto</a>
+          <a href="#contact" className="hover:text-blue-600 transition duration-300 ease-in-out">Contacto</a> */}
         </nav>
       </div>
     </footer>
