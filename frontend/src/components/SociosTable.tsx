@@ -15,15 +15,18 @@ interface SociosTableProps {
 const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onAdd }) => {
   const [modal, setModal] = useState<"ver" | "editar" | "eliminar" | "crear" | null>(null);
   const [socioActivo, setSocioActivo] = useState<Socio | null>(null);
+  const [errores, setErrores] = useState<Record<string, string>>({});
 
   const abrirModal = (tipo: "ver" | "editar" | "eliminar" | "crear", socio?: Socio) => {
     setSocioActivo(socio || null);
+    setErrores({});
     setModal(tipo);
   };
 
   const cerrarModal = () => {
     setModal(null);
     setSocioActivo(null);
+    setErrores({});
   };
 
   const confirmarEliminacion = () => {
@@ -31,6 +34,15 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
       onDelete(socioActivo.id);
       cerrarModal();
     }
+  };
+
+  const validarCampos = (campos: Record<string, string>) => {
+    const nuevosErrores: Record<string, string> = {};
+    Object.entries(campos).forEach(([clave, valor]) => {
+      if (!valor.trim()) nuevosErrores[clave] = `El campo ${clave} es obligatorio.`;
+    });
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
   };
 
   return (
@@ -95,56 +107,30 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl animate-fade-in">
             <h2 className="text-lg font-semibold text-green-600 mb-4">Nuevo Socio</h2>
-            <input id="nombre" className="w-full border rounded px-3 py-2 mb-2" placeholder="Nombre" />
-            <input id="correo" className="w-full border rounded px-3 py-2 mb-2" placeholder="Correo" />
-            <input id="telefono" className="w-full border rounded px-3 py-2 mb-2" placeholder="Teléfono" />
-            <input id="pais" className="w-full border rounded px-3 py-2 mb-2" placeholder="País" />
-            <input id="foto" className="w-full border rounded px-3 py-2 mb-2" placeholder="URL Foto" />
+            {['nombre', 'correo', 'telefono', 'pais', 'foto'].map((campo) => (
+              <div key={campo}>
+                <input id={campo} className="w-full border rounded px-3 py-2 mb-1" placeholder={campo[0].toUpperCase() + campo.slice(1)} />
+                {errores[campo] && <p className="text-red-500 text-sm mb-2">{errores[campo]}</p>}
+              </div>
+            ))}
             <div className="flex justify-between">
-              <button
-                className="mt-2 px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                onClick={cerrarModal}
-              >
-                Cancelar
-              </button>
+              <button className="mt-2 px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400" onClick={cerrarModal}>Cancelar</button>
               <button
                 className="mt-2 px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700"
                 onClick={() => {
-                  const nuevoSocio: Socio = {
-                    id: crypto.randomUUID(),
+                  const nuevo = {
                     nombre: (document.getElementById("nombre") as HTMLInputElement).value,
                     correo: (document.getElementById("correo") as HTMLInputElement).value,
                     telefono: (document.getElementById("telefono") as HTMLInputElement).value,
                     pais: (document.getElementById("pais") as HTMLInputElement).value,
                     foto: (document.getElementById("foto") as HTMLInputElement).value,
                   };
-                  onAdd(nuevoSocio);
+                  if (!validarCampos(nuevo)) return;
+                  onAdd({ ...nuevo, id: crypto.randomUUID() });
                   cerrarModal();
                 }}
-              >
-                Crear
-              </button>
+              >Crear</button>
             </div>
-          </div>
-        </div>
-      )}
-
-       {/* Modal Ver */}
-       {modal === "ver" && socioActivo && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl animate-fade-in">
-            <h2 className="text-lg font-semibold text-blue-700 mb-4">Información del Socio</h2>
-            <img src={socioActivo.foto} alt="Foto" className="w-20 h-20 rounded-full mx-auto mb-4" />
-            <p><strong>Nombre:</strong> {socioActivo.nombre}</p>
-            <p><strong>Correo:</strong> {socioActivo.correo}</p>
-            <p><strong>Teléfono:</strong> {socioActivo.telefono}</p>
-            <p><strong>País:</strong> {socioActivo.pais}</p>
-            <button
-              className="mt-4 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-              onClick={cerrarModal}
-            >
-              Cerrar
-            </button>
           </div>
         </div>
       )}
@@ -154,54 +140,50 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl animate-fade-in">
             <h2 className="text-lg font-semibold text-yellow-600 mb-4">Editar Socio</h2>
-            <input  id="nombre"
-              className="w-full border rounded px-3 py-2 mb-2"
-              defaultValue={socioActivo.nombre}
-              placeholder="Nombre"
-            />
-            <input id="correo"
-              className="w-full border rounded px-3 py-2 mb-2"
-              defaultValue={socioActivo.correo}
-              placeholder="Correo"
-            />
-            <input  id="telefono"
-              className="w-full border rounded px-3 py-2 mb-2"
-              defaultValue={socioActivo.telefono}
-              placeholder="Teléfono"
-            />
-            <input  id="pais"
-              className="w-full border rounded px-3 py-2 mb-2"
-              defaultValue={socioActivo.pais}
-              placeholder="País"
-            />
+            {['nombre', 'correo', 'telefono', 'pais'].map((campo) => (
+              <div key={campo}>
+                <input
+                  id={campo}
+                  className="w-full border rounded px-3 py-2 mb-1"
+                  defaultValue={(socioActivo as any)[campo]}
+                  placeholder={campo[0].toUpperCase() + campo.slice(1)}
+                />
+                {errores[campo] && <p className="text-red-500 text-sm mb-2">{errores[campo]}</p>}
+              </div>
+            ))}
             <div className="flex justify-between">
-              <button
-                className="mt-2 px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                onClick={cerrarModal}
-              >
-                Cancelar
-              </button>
-
+              <button className="mt-2 px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400" onClick={cerrarModal}>Cancelar</button>
               <button
                 className="mt-2 px-4 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700"
                 onClick={() => {
-                  if (socioActivo) {
-                    const socioEditado = {
-                      ...socioActivo,
-                      nombre: (document.getElementById("nombre") as HTMLInputElement).value,
-                      correo: (document.getElementById("correo") as HTMLInputElement).value,
-                      telefono: (document.getElementById("telefono") as HTMLInputElement).value,
-                      pais: (document.getElementById("pais") as HTMLInputElement).value,
-                    };
-                    onEdit(socioEditado); // ✅ Llama al padre
-                    cerrarModal();
-                  }
+                  const socioEditado = {
+                    ...socioActivo,
+                    nombre: (document.getElementById("nombre") as HTMLInputElement).value,
+                    correo: (document.getElementById("correo") as HTMLInputElement).value,
+                    telefono: (document.getElementById("telefono") as HTMLInputElement).value,
+                    pais: (document.getElementById("pais") as HTMLInputElement).value,
+                  };
+                  if (!validarCampos(socioEditado)) return;
+                  onEdit(socioEditado);
+                  cerrarModal();
                 }}
-              >
-                Guardar
-            </button>
-
+              >Guardar</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Ver */}
+      {modal === "ver" && socioActivo && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl animate-fade-in">
+            <h2 className="text-lg font-semibold text-blue-700 mb-4">Información del Socio</h2>
+            <img src={socioActivo.foto} alt="Foto" className="w-20 h-20 rounded-full mx-auto mb-4" />
+            <p><strong>Nombre:</strong> {socioActivo.nombre}</p>
+            <p><strong>Correo:</strong> {socioActivo.correo}</p>
+            <p><strong>Teléfono:</strong> {socioActivo.telefono}</p>
+            <p><strong>País:</strong> {socioActivo.pais}</p>
+            <button className="mt-4 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={cerrarModal}>Cerrar</button>
           </div>
         </div>
       )}
@@ -213,18 +195,8 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
             <h2 className="text-lg font-semibold text-red-600 mb-4">¿Eliminar Socio?</h2>
             <p className="text-gray-700">¿Estás seguro que deseas eliminar a <strong>{socioActivo.nombre}</strong>?</p>
             <div className="flex justify-between mt-6">
-              <button
-                className="px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                onClick={cerrarModal}
-              >
-                Cancelar
-              </button>
-              <button
-                className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                onClick={confirmarEliminacion}
-              >
-                Eliminar
-              </button>
+              <button className="px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400" onClick={cerrarModal}>Cancelar</button>
+              <button className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700" onClick={confirmarEliminacion}>Eliminar</button>
             </div>
           </div>
         </div>
