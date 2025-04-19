@@ -100,7 +100,7 @@ const Navbar = () => {
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-blue-600 font-medium transition"
             >
-              Inicio
+              Estadisticas
             </Link>
             <Link
               to="/simulador"
