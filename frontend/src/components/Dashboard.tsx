@@ -1,6 +1,5 @@
 // Dashboard.tsx
-// Componente principal del dashboard administrativo con métricas y gráficas interactivas
-// Usa Tailwind CSS para estilos y Recharts para visualización de datos profesionales
+// Componente principal del dashboard administrativo con métricas, gráficas interactivas y exportación
 
 import React from "react";
 import {
@@ -18,35 +17,69 @@ import {
   Line,
 } from "recharts";
 
-// Colores personalizados para el gráfico de torta
+// Importamos las funciones de exportación
+import {
+  exportDashboardToPDF,
+  exportDashboardToCSV,
+} from "../utils/ExportDashboardUtils";
+
+// Paleta de colores personalizada para el gráfico de torta
 const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 
-// Datos de ejemplo para las tarjetas de resumen
-const metricas = [
-  { titulo: "Socios Activos", valor: 250, color: "bg-blue-100", texto: "text-blue-700" },
-  { titulo: "Créditos Vigentes", valor: 90, color: "bg-yellow-100", texto: "text-yellow-700" },
-  { titulo: "Fondos Disponibles", valor: "$120M", color: "bg-green-100", texto: "text-green-700" },
-  { titulo: "Rendimientos", valor: "$18M", color: "bg-red-100", texto: "text-red-700" },
+// Datos simulados para tarjetas de resumen
+const metricas = {
+  fondos: 120_000_000,
+  socios: 250,
+  creditos: 90,
+  rendimientos: 18_000_000,
+};
+
+// Tarjetas pequeñas del dashboard
+const metricasCards = [
+  {
+    titulo: "Socios Activos",
+    valor: metricas.socios,
+    color: "bg-blue-100",
+    texto: "text-blue-700",
+  },
+  {
+    titulo: "Créditos Vigentes",
+    valor: metricas.creditos,
+    color: "bg-yellow-100",
+    texto: "text-yellow-700",
+  },
+  {
+    titulo: "Fondos Disponibles",
+    valor: `$${(metricas.fondos / 1_000_000).toFixed(1)}M`,
+    color: "bg-green-100",
+    texto: "text-green-700",
+  },
+  {
+    titulo: "Rendimientos",
+    valor: `$${(metricas.rendimientos / 1_000_000).toFixed(1)}M`,
+    color: "bg-red-100",
+    texto: "text-red-700",
+  },
 ];
 
-// Datos de ejemplo para el gráfico de barras (mensual)
-const ingresosEgresos = [
-  { mes: "Ene", ingresos: 5000000, egresos: 3000000 },
-  { mes: "Feb", ingresos: 4800000, egresos: 3200000 },
-  { mes: "Mar", ingresos: 5300000, egresos: 3100000 },
-  { mes: "Abr", ingresos: 6000000, egresos: 3500000 },
-  { mes: "May", ingresos: 6200000, egresos: 4000000 },
+// Datos simulados para gráfico de barras
+const dataBarras = [
+  { name: "Ene", ingresos: 5000000, egresos: 3000000 },
+  { name: "Feb", ingresos: 4800000, egresos: 3200000 },
+  { name: "Mar", ingresos: 5300000, egresos: 3100000 },
+  { name: "Abr", ingresos: 6000000, egresos: 3500000 },
+  { name: "May", ingresos: 6200000, egresos: 4000000 },
 ];
 
-// Datos de ejemplo para gráfico de torta
-const distribucionFondos = [
-  { nombre: "Ahorros", valor: 45 },
-  { nombre: "Créditos", valor: 35 },
-  { nombre: "Inversiones", valor: 15 },
-  { nombre: "Operación", valor: 5 },
+// Datos para gráfico de torta
+const dataTorta = [
+  { name: "Ahorros", valor: 45 },
+  { name: "Créditos", valor: 35 },
+  { name: "Inversiones", valor: 15 },
+  { name: "Operación", valor: 5 },
 ];
 
-// Datos para gráfico de líneas (crecimiento mensual de socios)
+// Datos de crecimiento de socios (gráfico de línea)
 const crecimientoSocios = [
   { mes: "Ene", socios: 210 },
   { mes: "Feb", socios: 220 },
@@ -63,22 +96,40 @@ const Dashboard = () => {
 
       {/* Tarjetas resumen */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-        {metricas.map((metrica, i) => (
-          <div key={i} className={`p-4 rounded shadow ${metrica.color}`}>
-            <h3 className={`text-sm font-medium ${metrica.texto}`}>{metrica.titulo}</h3>
-            <p className="text-xl font-bold mt-1">{metrica.valor}</p>
+        {metricasCards.map((m, i) => (
+          <div key={i} className={`p-4 rounded shadow ${m.color}`}>
+            <h3 className={`text-sm font-medium ${m.texto}`}>{m.titulo}</h3>
+            <p className="text-xl font-bold mt-1">{m.valor}</p>
           </div>
         ))}
       </div>
 
-      {/* Gráficas: barra, torta y línea */}
+      {/* Botones de exportación */}
+      <div className="flex justify-end gap-4 mb-6">
+        <button
+          onClick={() => exportDashboardToPDF(metricas, dataBarras, dataTorta)}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Exportar PDF
+        </button>
+        <button
+          onClick={() => exportDashboardToCSV(metricas, dataBarras, dataTorta)}
+          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Exportar CSV
+        </button>
+      </div>
+
+      {/* Gráficas: barra y torta */}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Gráfico de barras */}
         <div className="bg-white border rounded p-4 shadow-md col-span-2">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Ingresos vs Egresos Mensuales</h2>
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            Ingresos vs Egresos Mensuales
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={ingresosEgresos}>
-              <XAxis dataKey="mes" />
+            <BarChart data={dataBarras}>
+              <XAxis dataKey="name" />
               <YAxis />
               <Tooltip formatter={(value: number) => `$${(value / 1_000_000).toFixed(1)}M`} />
               <Legend />
@@ -90,17 +141,19 @@ const Dashboard = () => {
 
         {/* Gráfico de torta */}
         <div className="bg-white border rounded p-4 shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">Distribución de Fondos</h2>
+          <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
+            Distribución de Fondos
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
-                data={distribucionFondos}
+                data={dataTorta}
                 dataKey="valor"
-                nameKey="nombre"
+                nameKey="name"
                 outerRadius={90}
                 label
               >
-                {distribucionFondos.map((entry, index) => (
+                {dataTorta.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -110,16 +163,24 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Gráfico de líneas */}
+      {/* Gráfico de línea */}
       <div className="mt-10 bg-white border rounded p-4 shadow-md">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">Crecimiento de Socios</h2>
+        <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
+          Crecimiento de Socios
+        </h2>
         <ResponsiveContainer width="100%" height={250}>
           <LineChart data={crecimientoSocios}>
             <XAxis dataKey="mes" />
             <YAxis />
-            <Tooltip formatter={(value: number) => value} />
+            <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="socios" stroke="#10B981" strokeWidth={2} dot={{ r: 4 }} />
+            <Line
+              type="monotone"
+              dataKey="socios"
+              stroke="#10B981"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
