@@ -1,5 +1,4 @@
 // src/pages/Dashboard.tsx
-// Dashboard visual moderno y funcional con métricas, gráficas y exportación
 
 import React from "react";
 import {
@@ -19,10 +18,10 @@ import {
 import { exportDashboardToPDF, exportDashboardToCSV } from "../utils/ExportDashboardUtils";
 import { useNavigate } from "react-router-dom";
 
-// 🎨 Paleta de colores del dashboard
-const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
+// 🎨 Colores personalizados según tailwind.config.js
+const COLORS = ["#026773", "#024959", "#012E40", "#3CA6A6"]; // primary y variaciones
 
-// 📊 Datos simulados para las tarjetas de métricas
+// 📊 Datos simulados para métricas
 const metricas = {
   fondos: 120_000_000,
   socios: 250,
@@ -30,39 +29,39 @@ const metricas = {
   rendimientos: 18_000_000,
 };
 
-// 🎯 Tarjetas individuales con estilos y valores
+// 🧾 Tarjetas con estilos
 const metricasCards = [
   {
     titulo: "Socios Activos",
     valor: metricas.socios,
-    color: "bg-blue-50",
-    texto: "text-blue-600",
+    color: "bg-primary/10",
+    texto: "text-primary",
     icon: "👥",
   },
   {
     titulo: "Créditos Vigentes",
     valor: metricas.creditos,
-    color: "bg-yellow-50",
-    texto: "text-yellow-600",
+    color: "bg-accent/10",
+    texto: "text-accent",
     icon: "💳",
   },
   {
     titulo: "Fondos Disponibles",
     valor: `$${(metricas.fondos / 1_000_000).toFixed(1)}M`,
-    color: "bg-green-50",
-    texto: "text-green-600",
+    color: "bg-primary-darker/10",
+    texto: "text-primary-darker",
     icon: "💰",
   },
   {
     titulo: "Rendimientos",
     valor: `$${(metricas.rendimientos / 1_000_000).toFixed(1)}M`,
-    color: "bg-red-50",
-    texto: "text-red-600",
+    color: "bg-primary-darkest/10",
+    texto: "text-primary-darkest",
     icon: "📈",
   },
 ];
 
-// 📅 Datos para gráfico de barras (ingresos y egresos mensuales)
+// 📅 Datos para gráfico de barras
 const dataBarras = [
   { name: "Ene", ingresos: 5000000, egresos: 3000000 },
   { name: "Feb", ingresos: 4800000, egresos: 3200000 },
@@ -71,7 +70,7 @@ const dataBarras = [
   { name: "May", ingresos: 6200000, egresos: 4000000 },
 ];
 
-// 📘 Datos para gráfico de torta (distribución de fondos)
+// 📘 Datos para gráfico de torta
 const dataTorta = [
   { name: "Ahorros", valor: 45 },
   { name: "Créditos", valor: 35 },
@@ -79,7 +78,7 @@ const dataTorta = [
   { name: "Operación", valor: 5 },
 ];
 
-// 📈 Datos para gráfico de línea (crecimiento de socios)
+// 📈 Datos para gráfico de línea
 const crecimientoSocios = [
   { mes: "Ene", socios: 210 },
   { mes: "Feb", socios: 220 },
@@ -93,8 +92,8 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 pt-6 pb-12 lg:pl-64 animate-fade-in">
-      {/* Título del dashboard */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard General</h1>
+      {/* 🏷️ Título */}
+      <h1 className="text-3xl font-bold text-primary mb-6">Dashboard General</h1>
 
       {/* 🧾 Tarjetas de métricas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
@@ -104,7 +103,7 @@ const Dashboard = () => {
               <span className="text-xl">{card.icon}</span>
               <h3 className={`text-md font-semibold ${card.texto}`}>{card.titulo}</h3>
             </div>
-            <p className="mt-2 text-2xl font-bold text-gray-800">{card.valor}</p>
+            <p className="mt-2 text-2xl font-bold text-primary-darkest">{card.valor}</p>
           </div>
         ))}
       </div>
@@ -113,7 +112,7 @@ const Dashboard = () => {
       <div className="flex flex-wrap justify-end gap-4 mb-8">
         <button
           onClick={() => navigate("/simulador")}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-md text-sm"
+          className="bg-primary hover:bg-primary-darker text-white px-5 py-2 rounded-md text-sm"
         >
           Ir al Simulador
         </button>
@@ -131,26 +130,27 @@ const Dashboard = () => {
         </button>
       </div>
 
-      {/* 📊 Gráficas de barras y torta */}
+      {/* 📊 Gráficas principales */}
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Ingresos vs Egresos */}
+        {/* 📉 Gráfico de barras */}
         <div className="bg-white rounded-xl p-6 shadow col-span-2">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Ingresos vs Egresos Mensuales</h2>
+          <h2 className="text-lg font-semibold text-primary mb-4">Ingresos vs Egresos Mensuales</h2>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={dataBarras}>
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip formatter={(value: number) => `$${(value / 1_000_000).toFixed(1)}M`} />
               <Legend />
-              <Bar dataKey="ingresos" fill="#3B82F6" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="egresos" fill="#EF4444" radius={[4, 4, 0, 0]} />
+              {/* 🎨 Colores personalizados */}
+              <Bar dataKey="ingresos" fill="#026773" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="egresos" fill="#3CA6A6" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Distribución de fondos */}
+        {/* 🥧 Gráfico de torta */}
         <div className="bg-white rounded-xl p-6 shadow">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">Distribución de Fondos</h2>
+          <h2 className="text-lg font-semibold text-primary mb-4 text-center">Distribución de Fondos</h2>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
@@ -170,9 +170,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* 📈 Gráfico de línea: crecimiento de socios */}
+      {/* 📈 Gráfico de línea */}
       <div className="mt-10 bg-white rounded-xl p-6 shadow">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">Crecimiento de Socios</h2>
+        <h2 className="text-lg font-semibold text-primary mb-4 text-center">Crecimiento de Socios</h2>
         <ResponsiveContainer width="100%" height={250}>
           <LineChart data={crecimientoSocios}>
             <XAxis dataKey="mes" />
@@ -182,7 +182,7 @@ const Dashboard = () => {
             <Line
               type="monotone"
               dataKey="socios"
-              stroke="#10B981"
+              stroke="#026773" // 🎨 Línea con color primario
               strokeWidth={2}
               dot={{ r: 4 }}
             />
