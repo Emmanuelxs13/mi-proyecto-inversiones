@@ -57,7 +57,7 @@ const crecimientoSocios = [
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen p-6 bg-white animate-fade-in">
+    <div className="min-h-screen p-6 bg-white animate-fade-in pl-48 pr-4 py-6 ml-6">
       {/* Título principal */}
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard General</h1>
 
