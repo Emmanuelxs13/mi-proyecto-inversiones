@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <section
-      id="hero"
+      id="dashboard"
       className="bg-gradient-to-b from-blue-100 to-white py-36 text-center animate-fade-in"
     >
       <div className="max-w-3xl mx-auto">
