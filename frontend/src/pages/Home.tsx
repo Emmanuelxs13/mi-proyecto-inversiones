@@ -1,6 +1,6 @@
 // Home.tsx
 import Navbar from "../components/Navbar";
-import Hero from "../components/Hero";
+import Hero from "../components/Dashboard";
 import Footer from "../components/Footer";
 import Beneficios  from "../components/Beneficios";
 
