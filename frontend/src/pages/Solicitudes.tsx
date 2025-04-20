@@ -1,8 +1,9 @@
 // Solicitudes.tsx
-// Vista de solicitudes de registro con datos simulados, filtro por estado, acciones (ver, aprobar, rechazar) y contador en el sidebar
+// Vista de solicitudes de registro con datos simulados, filtro por estado, acciones (ver, aprobar, rechazar), exportación a PDF y contador
 
 import React, { useState } from "react";
 import { format } from "date-fns";
+import { exportSolicitudesToPDF } from "../utils/ExportSolicitudesUtils";
 
 // Tipo para representar una solicitud
 interface Solicitud {
@@ -58,7 +59,6 @@ const Solicitudes = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 pt-6 pb-12 lg:pl-64 animate-fade-in">
-
       <section className="py-12 px-4 max-w-6xl mx-auto animate-fade-in">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-blue-700">Solicitudes de Registro</h1>
@@ -99,12 +99,20 @@ const Solicitudes = () => {
               >
                 {sol.estado.toUpperCase()}
               </span>
-              <button
-                onClick={() => setModal(sol)}
-                className="block mt-3 text-blue-600 text-sm underline"
-              >
-                Ver Detalles
-              </button>
+              <div className="mt-3 flex justify-between items-center">
+                <button
+                  onClick={() => setModal(sol)}
+                  className="text-blue-600 text-sm underline"
+                >
+                  Ver Detalles
+                </button>
+                <button
+                  onClick={() => exportSolicitudesToPDF([sol])}
+                  className="text-sm px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded"
+                >
+                  Exportar PDF
+                </button>
+              </div>
             </div>
           ))}
         </div>
