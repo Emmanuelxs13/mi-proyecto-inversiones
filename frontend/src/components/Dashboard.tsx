@@ -1,5 +1,4 @@
-// Dashboard.tsx
-// Componente principal del dashboard administrativo con métricas, gráficas interactivas y exportación
+// src/pages/Dashboard.tsx
 
 import React from "react";
 import {
@@ -16,19 +15,13 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import { exportDashboardToPDF, exportDashboardToCSV } from "../utils/ExportDashboardUtils";
+import { useNavigate } from "react-router-dom";
 
-// Importamos las funciones de exportación
-import {
-  exportDashboardToPDF,
-  exportDashboardToCSV,
-} from "../utils/ExportDashboardUtils";
+// 🎨 Colores personalizados según tailwind.config.js
+const COLORS = ["#026773", "#024959", "#012E40", "#3CA6A6"]; // primary y variaciones
 
-import { useNavigate } from "react-router-dom"; // 🧭 Para navegación con botón
-
-// Paleta de colores personalizada para el gráfico de torta
-const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
-
-// Datos simulados para tarjetas de resumen
+// 📊 Datos simulados para métricas
 const metricas = {
   fondos: 120_000_000,
   socios: 250,
@@ -36,35 +29,39 @@ const metricas = {
   rendimientos: 18_000_000,
 };
 
-// Tarjetas pequeñas del dashboard
+// 🧾 Tarjetas con estilos
 const metricasCards = [
   {
     titulo: "Socios Activos",
     valor: metricas.socios,
-    color: "bg-blue-100",
-    texto: "text-blue-700",
+    color: "bg-primary/10",
+    texto: "text-primary",
+    icon: "👥",
   },
   {
     titulo: "Créditos Vigentes",
     valor: metricas.creditos,
-    color: "bg-yellow-100",
-    texto: "text-yellow-700",
+    color: "bg-accent/10",
+    texto: "text-accent",
+    icon: "💳",
   },
   {
     titulo: "Fondos Disponibles",
     valor: `$${(metricas.fondos / 1_000_000).toFixed(1)}M`,
-    color: "bg-green-100",
-    texto: "text-green-700",
+    color: "bg-primary-darker/10",
+    texto: "text-primary-darker",
+    icon: "💰",
   },
   {
     titulo: "Rendimientos",
     valor: `$${(metricas.rendimientos / 1_000_000).toFixed(1)}M`,
-    color: "bg-red-100",
-    texto: "text-red-700",
+    color: "bg-primary-darkest/10",
+    texto: "text-primary-darkest",
+    icon: "📈",
   },
 ];
 
-// Datos simulados para gráfico de barras
+// 📅 Datos para gráfico de barras
 const dataBarras = [
   { name: "Ene", ingresos: 5000000, egresos: 3000000 },
   { name: "Feb", ingresos: 4800000, egresos: 3200000 },
@@ -73,7 +70,7 @@ const dataBarras = [
   { name: "May", ingresos: 6200000, egresos: 4000000 },
 ];
 
-// Datos para gráfico de torta
+// 📘 Datos para gráfico de torta
 const dataTorta = [
   { name: "Ahorros", valor: 45 },
   { name: "Créditos", valor: 35 },
@@ -81,7 +78,7 @@ const dataTorta = [
   { name: "Operación", valor: 5 },
 ];
 
-// Datos de crecimiento de socios (gráfico de línea)
+// 📈 Datos para gráfico de línea
 const crecimientoSocios = [
   { mes: "Ene", socios: 210 },
   { mes: "Feb", socios: 220 },
@@ -90,73 +87,70 @@ const crecimientoSocios = [
   { mes: "May", socios: 250 },
 ];
 
-
 const Dashboard = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen p-6 bg-white animate-fade-in pl-48 pr-4 py-6 ml-6">
-      {/* Título principal */}
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard General</h1>
+    <div className="min-h-screen bg-gray-50 px-6 pt-6 pb-12 lg:pl-64 animate-fade-in">
+      {/* 🏷️ Título */}
+      <h1 className="text-3xl font-bold text-primary mb-6">Dashboard General</h1>
 
-      {/* Tarjetas resumen */}
+      {/* 🧾 Tarjetas de métricas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-        {metricasCards.map((m, i) => (
-          <div key={i} className={`p-4 rounded shadow ${m.color}`}>
-            <h3 className={`text-sm font-medium ${m.texto}`}>{m.titulo}</h3>
-            <p className="text-xl font-bold mt-1">{m.valor}</p>
+        {metricasCards.map((card, index) => (
+          <div key={index} className={`rounded-xl shadow-sm p-5 ${card.color}`}>
+            <div className="flex items-center gap-3">
+              <span className="text-xl">{card.icon}</span>
+              <h3 className={`text-md font-semibold ${card.texto}`}>{card.titulo}</h3>
+            </div>
+            <p className="mt-2 text-2xl font-bold text-primary-darkest">{card.valor}</p>
           </div>
         ))}
       </div>
 
-      {/* Botones de exportación */}
-      <div className="flex justify-end gap-4 mb-6">
-        {/* Botón para ir al simulador */}
+      {/* 🎛 Botones de acción */}
+      <div className="flex flex-wrap justify-end gap-4 mb-8">
         <button
           onClick={() => navigate("/simulador")}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm"
+          className="bg-primary hover:bg-primary-darker text-white px-5 py-2 rounded-md text-sm"
         >
           Ir al Simulador
         </button>
-        
         <button
           onClick={() => exportDashboardToPDF(metricas, dataBarras, dataTorta)}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"
+          className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-md text-sm"
         >
           Exportar PDF
         </button>
         <button
           onClick={() => exportDashboardToCSV(metricas, dataBarras, dataTorta)}
-          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm"
+          className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-md text-sm"
         >
           Exportar CSV
         </button>
       </div>
 
-      {/* Gráficas: barra y torta */}
+      {/* 📊 Gráficas principales */}
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Gráfico de barras */}
-        <div className="bg-white border rounded p-4 shadow-md col-span-2">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">
-            Ingresos vs Egresos Mensuales
-          </h2>
+        {/* 📉 Gráfico de barras */}
+        <div className="bg-white rounded-xl p-6 shadow col-span-2">
+          <h2 className="text-lg font-semibold text-primary mb-4">Ingresos vs Egresos Mensuales</h2>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={dataBarras}>
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip formatter={(value: number) => `$${(value / 1_000_000).toFixed(1)}M`} />
               <Legend />
-              <Bar dataKey="ingresos" fill="#3B82F6" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="egresos" fill="#EF4444" radius={[4, 4, 0, 0]} />
+              {/* 🎨 Colores personalizados */}
+              <Bar dataKey="ingresos" fill="#026773" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="egresos" fill="#3CA6A6" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Gráfico de torta */}
-        <div className="bg-white border rounded p-4 shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
-            Distribución de Fondos
-          </h2>
+        {/* 🥧 Gráfico de torta */}
+        <div className="bg-white rounded-xl p-6 shadow">
+          <h2 className="text-lg font-semibold text-primary mb-4 text-center">Distribución de Fondos</h2>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
@@ -176,11 +170,9 @@ const navigate = useNavigate();
         </div>
       </div>
 
-      {/* Gráfico de línea */}
-      <div className="mt-10 bg-white border rounded p-4 shadow-md">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
-          Crecimiento de Socios
-        </h2>
+      {/* 📈 Gráfico de línea */}
+      <div className="mt-10 bg-white rounded-xl p-6 shadow">
+        <h2 className="text-lg font-semibold text-primary mb-4 text-center">Crecimiento de Socios</h2>
         <ResponsiveContainer width="100%" height={250}>
           <LineChart data={crecimientoSocios}>
             <XAxis dataKey="mes" />
@@ -190,7 +182,7 @@ const navigate = useNavigate();
             <Line
               type="monotone"
               dataKey="socios"
-              stroke="#10B981"
+              stroke="#026773" // 🎨 Línea con color primario
               strokeWidth={2}
               dot={{ r: 4 }}
             />
