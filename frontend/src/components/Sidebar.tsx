@@ -3,7 +3,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Users, FileText, Bell } from "lucide-react";
+import { Home, Users, FileText, Bell, PhoneCall } from "lucide-react";
 // import Logo from "@/assets/logo.svg";
 
 export default function Sidebar() {
@@ -35,6 +35,9 @@ export default function Sidebar() {
           </Link>
           <Link to="/historial" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
             <FileText size={18} /> Historial
+          </Link>
+          <Link to="/contacto" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
+            <PhoneCall size={18} /> Contacto
           </Link>
         </nav>
       </div>

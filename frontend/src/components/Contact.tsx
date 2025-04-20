@@ -1,12 +1,10 @@
 // src/pages/Contacto.tsx
 import React from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const Contacto = () => {
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    <div className="min-h-screen p-6 bg-white animate-fade-in pl-48 pr-4 py-6 ml-6">
       <section className="max-w-4xl mx-auto px-4 py-16">
         <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Contáctanos</h1>
         <form className="grid gap-6 bg-gray-50 p-8 rounded-lg shadow-md">
