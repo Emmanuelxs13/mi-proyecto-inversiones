@@ -23,6 +23,8 @@ import {
   exportDashboardToCSV,
 } from "../utils/ExportDashboardUtils";
 
+import { useNavigate } from "react-router-dom"; // 🧭 Para navegación con botón
+
 // Paleta de colores personalizada para el gráfico de torta
 const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 
@@ -88,7 +90,10 @@ const crecimientoSocios = [
   { mes: "May", socios: 250 },
 ];
 
+
 const Dashboard = () => {
+const navigate = useNavigate();
+
   return (
     <div className="min-h-screen p-6 bg-white animate-fade-in pl-48 pr-4 py-6 ml-6">
       {/* Título principal */}
@@ -106,6 +111,14 @@ const Dashboard = () => {
 
       {/* Botones de exportación */}
       <div className="flex justify-end gap-4 mb-6">
+        {/* Botón para ir al simulador */}
+        <button
+          onClick={() => navigate("/simulador")}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Ir al Simulador
+        </button>
+        
         <button
           onClick={() => exportDashboardToPDF(metricas, dataBarras, dataTorta)}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"

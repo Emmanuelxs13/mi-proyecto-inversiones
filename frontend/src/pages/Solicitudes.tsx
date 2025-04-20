@@ -2,7 +2,6 @@
 // Página de gestión de solicitudes con tabla, exportación y navegación
 
 import React from "react";
-import Navbar from "../components/Navbar";
 import SolicitudesTable from "../components/SolicitudesTable";
 import { exportSolicitudesToPDF, exportSolicitudesToCSV } from "../utils/ExportSolicitudesUtils";
 import { Solicitud } from "../types/Solicitud";
@@ -29,8 +28,7 @@ const solicitudesSimuladas: Solicitud[] = [
 
 const Solicitudes = () => {
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    <div className="mmin-h-screen p-6 bg-white animate-fade-in pl-48 pr-4 py-6 ml-6">
 
       <section className="py-12 px-6 max-w-7xl mx-auto animate-fade-in">
         <div className="flex justify-between items-center mb-6">

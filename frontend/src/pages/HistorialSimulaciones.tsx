@@ -1,7 +1,6 @@
 // Página de historial de simulaciones con exportación a PDF y CSV
 
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import { exportHistorialToPDF, exportHistorialToCSV } from "../utils/ExportUtils";
 import { Simulacion } from "../types/Simulacion";
 
@@ -56,8 +55,7 @@ const SimulatorHistory = () => {
     : historial;
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    <div className="min-h-screen p-6 bg-white animate-fade-in pl-48 pr-4 py-6 ml-6">
 
       <section className="py-20 px-4 animate-fade-in max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Historial de Simulaciones</h1>

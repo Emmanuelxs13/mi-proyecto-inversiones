@@ -2,7 +2,6 @@
 // Página de gestión de socios con datos obtenidos desde una API pública con opción de definir la cantidad de registros, paginación y búsqueda por nombre en el frontend
 
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import SociosTable from "../components/SociosTable";
 import { Socio } from "../types/Socio";
 
@@ -115,8 +114,7 @@ const Socios = () => {
   
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    <div className="min-h-screen p-6 bg-white animate-fade-in pl-48 pr-4 py-6 ml-6">
 
       <section className="py-12 px-6 max-w-7xl mx-auto animate-fade-in">
         <h1 className="text-3xl font-bold text-blue-700 mb-6">Gestión de Socios</h1>
