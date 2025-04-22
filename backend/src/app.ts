@@ -1,13 +1,16 @@
-// src/app.ts
 import express from 'express';
 import cors from 'cors';
-import sociosRoutes from './routes/socios.routes';
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/socios', sociosRoutes);
+// Ruta raíz
+app.get('/', (_req, res) => {
+  res.send('API de Fondo de Empleados funcionando ✅');
+});
 
 export default app;
