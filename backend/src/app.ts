@@ -3,6 +3,7 @@ import cors from 'cors';
 import sociosRoutes from './routes/socios.routes';
 import sedesRoutes from './routes/sedes.routes';
 import tiposPrestamoRoutes from './routes/tiposPrestamo.routes';
+import prestamosRoutes from "./routes/prestamos.routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,5 +20,6 @@ app.get('/', (_req, res) => {
 app.use('/api/socios', sociosRoutes); //socios
 app.use('/api/sedes', sedesRoutes); //sedes
 app.use('/api/tipos-prestamo', tiposPrestamoRoutes); //tipos de prestamo
+app.use("/api/prestamos", prestamosRoutes); //prestamos
 
 export default app;
