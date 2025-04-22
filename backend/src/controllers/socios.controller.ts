@@ -1,3 +1,6 @@
+// src/controllers/socios.controller.ts
+// Controladores para gestionar las operaciones CRUD de socios
+
 // Importamos los tipos y funciones desde el modelo de socios
 import {
     obtenerSocios,
@@ -12,6 +15,7 @@ import {
   import { Request, Response } from 'express';
   
   /**
+   * GET /api/socios
    * Controlador para obtener todos los socios
    */
   export const getSocios = async (_req: Request, res: Response): Promise<void> => {
@@ -25,6 +29,7 @@ import {
   };
   
   /**
+   * GET /api/socios/:id
    * Controlador para obtener un socio por su ID
    */
   export const getSocioById = async (req: Request, res: Response): Promise<void> => {
@@ -46,6 +51,7 @@ import {
   };
   
   /**
+   * POST /api/socios
    * Controlador para crear un nuevo socio
    */
   export const postSocio = async (req: Request, res: Response): Promise<void> => {
@@ -61,6 +67,7 @@ import {
   };
   
   /**
+   * PUT /api/socios/:id
    * Controlador para actualizar un socio existente
    */
   export const putSocio = async (req: Request, res: Response): Promise<void> => {
@@ -77,6 +84,7 @@ import {
   };
   
   /**
+   * DELETE /api/socios/:id
    * Controlador para eliminar un socio
    */
   export const deleteSocio = async (req: Request, res: Response): Promise<void> => {
