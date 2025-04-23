@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: fondo_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: fondo_user
+      POSTGRES_PASSWORD: fondo_password
+      POSTGRES_DB: fondo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: fondo_backend
+    restart: always
+    environment:
+      DATABASE_URL: postgres://fondo_user:fondo_password@postgres:5432/fondo_db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: fondo_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+    command: npm run dev
+
+volumes:
+  postgres_data:
