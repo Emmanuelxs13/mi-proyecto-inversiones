@@ -1,18 +1,16 @@
 // Prestamos.tsx
-// Página que muestra los préstamos registrados y permite su creación
-// Usa Tailwind para estilos, fetch para consumo de API, y exportación CSV/PDF
 
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { exportPrestamosToCSV, exportPrestamosToPDF } from "../utils/ExportPrestamosUtils";
+import { PrestamoVista } from "../types/PrestamoVista"; // ✅ importamos tipo correcto
 
-// Tipo para representar un préstamo (debe coincidir con tu backend)
 interface Prestamo {
   id: number;
   id_usuario: number;
-  nombre_usuario?: string; // Campo opcional si se trae desde una JOIN en el backend
+  nombre_usuario?: string;
   id_tipo_prestamo: number;
-  tipo_prestamo?: string; // opcional también
+  tipo_prestamo?: string;
   monto: number;
   cuotas_total: number;
   fecha_inicio: string;
@@ -24,7 +22,6 @@ const Prestamos = () => {
   const [filtro, setFiltro] = useState<string>("todos");
   const [alerta, setAlerta] = useState<string | null>(null);
 
-  // Fetch de datos desde el backend
   const obtenerPrestamos = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/prestamos");
@@ -39,13 +36,20 @@ const Prestamos = () => {
     obtenerPrestamos();
   }, []);
 
-  // Filtro de estado
   const prestamosFiltrados =
-    filtro === "todos"
-      ? prestamos
-      : prestamos.filter((p) => p.estado === filtro);
+    filtro === "todos" ? prestamos : prestamos.filter((p) => p.estado === filtro);
 
-  // Crear préstamo con datos simulados
+  // Mapeo para exportación con tipo correcto PrestamoVista
+  const prestamosVista: PrestamoVista[] = prestamosFiltrados.map((p) => ({
+    id: p.id,
+    nombreSocio: p.nombre_usuario || `Usuario ${p.id_usuario}`,
+    tipoPrestamo: p.tipo_prestamo || `Tipo ${p.id_tipo_prestamo}`,
+    monto: p.monto,
+    cuotasTotal: p.cuotas_total,
+    fechaInicio: p.fecha_inicio,
+    estado: p.estado,
+  }));
+
   const crearPrestamoSimulado = async () => {
     const nuevo = {
       id_usuario: 1,
@@ -80,18 +84,16 @@ const Prestamos = () => {
 
       {/* Filtros y Acciones */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex gap-2">
-          <select
-            value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
-            className="border rounded px-3 py-1 text-sm"
-          >
-            <option value="todos">Todos</option>
-            <option value="vigente">Vigentes</option>
-            <option value="pendiente">Pendientes</option>
-            <option value="cancelado">Cancelados</option>
-          </select>
-        </div>
+        <select
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+          className="border rounded px-3 py-1 text-sm"
+        >
+          <option value="todos">Todos</option>
+          <option value="vigente">Vigentes</option>
+          <option value="pendiente">Pendientes</option>
+          <option value="cancelado">Cancelados</option>
+        </select>
 
         <div className="flex gap-2">
           <button
@@ -101,13 +103,13 @@ const Prestamos = () => {
             Crear Préstamo
           </button>
           <button
-            onClick={() => exportPrestamosToPDF(prestamosFiltrados)}
+            onClick={() => exportPrestamosToPDF(prestamosVista)}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
           >
             Exportar PDF
           </button>
           <button
-            onClick={() => exportPrestamosToCSV(prestamosFiltrados)}
+            onClick={() => exportPrestamosToCSV(prestamosVista)}
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
           >
             Exportar CSV
@@ -115,7 +117,6 @@ const Prestamos = () => {
         </div>
       </div>
 
-      {/* Alerta de creación */}
       {alerta && (
         <div className="bg-green-100 text-green-800 p-2 rounded mb-4 text-sm">
           {alerta}
