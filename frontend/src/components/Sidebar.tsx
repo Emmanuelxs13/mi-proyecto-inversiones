@@ -24,18 +24,26 @@ export default function Sidebar() {
           <Link to="/dashboard" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
             <Home size={18} /> Dashboard
           </Link>
+
           <Link to="/socios" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
             <Users size={18} /> Socios
           </Link>
+
           <Link to="/solicitudes" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition relative">
             <Bell size={18} />
             Solicitudes
             {/* Indicador de notificación (ejemplo estático) */}
             <span className="absolute top-0 right-0 -mt-1 -mr-2 bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
           </Link>
+
           <Link to="/historial" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
             <FileText size={18} /> Historial
           </Link>
+
+          <Link to="/prestamos" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
+            <FileText size={18} /> Préstamos
+          </Link>
+          
           <Link to="/contacto" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
             <PhoneCall size={18} /> Contacto
           </Link>
