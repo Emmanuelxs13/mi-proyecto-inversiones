@@ -1,17 +1,69 @@
 import pool from "../config/db";
 
-// Estructura de un préstamo
+// Estructura del tipo de dato para un préstamo
 export interface Prestamo {
   id?: number;
-  usuario_id: number;
-  tipo_prestamo_id: number;
-  monto_total: number;
+  id_usuario: number;
+  id_tipo_prestamo: number;
+  monto: number;
   cuotas_total: number;
-  cuotas_pagadas?: number;
+  fecha_inicio: string;
+  estado?: "vigente" | "pendiente" | "cancelado";
 }
 
-// Obtener todos los préstamos
-// Obtener todos los préstamos con nombre del usuario y tipo de préstamo
+/**
+ * Crea un préstamo y sus cuotas automáticamente
+ * @param prestamo - Datos del préstamo
+ */
+export const crearPrestamoConCuotas = async (prestamo: Prestamo): Promise<void> => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN"); // Comenzamos la transacción
+
+    // Insertamos el préstamo
+    const result = await client.query(
+      `INSERT INTO prestamos (id_usuario, id_tipo_prestamo, monto, cuotas_total, fecha_inicio)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id`,
+      [
+        prestamo.id_usuario,
+        prestamo.id_tipo_prestamo,
+        prestamo.monto,
+        prestamo.cuotas_total,
+        prestamo.fecha_inicio,
+      ]
+    );
+
+    const prestamoId = result.rows[0].id;
+
+    // Calculamos el valor de cada cuota
+    const valorCuota = prestamo.monto / prestamo.cuotas_total;
+
+    // Insertamos las cuotas mensuales
+    for (let i = 1; i <= prestamo.cuotas_total; i++) {
+      const fechaPago = new Date(prestamo.fecha_inicio);
+      fechaPago.setMonth(fechaPago.getMonth() + i);
+
+      await client.query(
+        `INSERT INTO cuotas (id_prestamo, numero_cuota, valor, estado, fecha_pago)
+         VALUES ($1, $2, $3, 'pendiente', $4)`,
+        [prestamoId, i, valorCuota, fechaPago]
+      );
+    }
+
+    await client.query("COMMIT"); // Confirmamos la transacción
+  } catch (error) {
+    await client.query("ROLLBACK"); // Revertimos si hay error
+    throw error;
+  } finally {
+    client.release(); // Liberamos la conexión
+  }
+};
+
+/**
+ * Consulta todos los préstamos con nombres reales
+ */
 export const obtenerPrestamos = async () => {
   const result = await pool.query(`
     SELECT 
@@ -30,15 +82,4 @@ export const obtenerPrestamos = async () => {
     ORDER BY p.id DESC
   `);
   return result.rows;
-};
-
-// Crear un préstamo
-export const crearPrestamo = async (prestamo: Prestamo) => {
-  const { usuario_id, tipo_prestamo_id, monto_total, cuotas_total } = prestamo;
-
-  await pool.query(
-    `INSERT INTO prestamos (usuario_id, tipo_prestamo_id, monto_total, cuotas_total)
-     VALUES ($1, $2, $3, $4)`,
-    [usuario_id, tipo_prestamo_id, monto_total, cuotas_total]
-  );
 };

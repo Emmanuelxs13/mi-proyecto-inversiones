@@ -8,9 +8,9 @@ import { PrestamoVista } from "../types/PrestamoVista"; // ✅ importamos tipo c
 interface Prestamo {
   id: number;
   id_usuario: number;
-  nombre_usuario?: string;
+  nombre_usuario: string;
   id_tipo_prestamo: number;
-  tipo_prestamo?: string;
+  tipo_prestamo: string;
   monto: number;
   cuotas_total: number;
   fecha_inicio: string;
@@ -24,7 +24,7 @@ const Prestamos = () => {
 
   const obtenerPrestamos = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/prestamos");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/prestamos`);
       const data = await res.json();
       setPrestamos(data);
     } catch (error) {
@@ -60,7 +60,7 @@ const Prestamos = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/prestamos", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/prestamos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevo),
