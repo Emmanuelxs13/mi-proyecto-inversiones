@@ -1,9 +1,12 @@
-import { Router } from "express";
-import { getPrestamos, postPrestamo } from "../controllers/prestamos.controller";
+import { Router } from 'express';
+import { getPrestamos, postPrestamo } from '../controllers/prestamos.controller';
 
 const router = Router();
 
-router.get("/", getPrestamos);
-router.post("/", postPrestamo);
+// GET /prestamos
+router.get('/', getPrestamos);
+
+// POST /prestamos
+router.post('/', postPrestamo);
 
 export default router;
