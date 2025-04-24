@@ -11,8 +11,24 @@ export interface Prestamo {
 }
 
 // Obtener todos los préstamos
+// Obtener todos los préstamos con nombre del usuario y tipo de préstamo
 export const obtenerPrestamos = async () => {
-  const result = await pool.query("SELECT * FROM prestamos");
+  const result = await pool.query(`
+    SELECT 
+      p.id,
+      p.id_usuario,
+      u.nombre AS nombre_usuario,
+      p.id_tipo_prestamo,
+      tp.nombre AS tipo_prestamo,
+      p.monto,
+      p.cuotas_total,
+      p.fecha_inicio,
+      p.estado
+    FROM prestamos p
+    JOIN usuarios u ON p.id_usuario = u.id
+    JOIN tipos_prestamos tp ON p.id_tipo_prestamo = tp.id
+    ORDER BY p.id DESC
+  `);
   return result.rows;
 };
 
