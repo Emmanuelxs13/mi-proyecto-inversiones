@@ -1,22 +1,14 @@
-// src/pages/Prestamos.tsx
-// Página de gestión de préstamos: incluye listado, filtros, exportación y creación desde modal
-
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-// Utilidades de exportación PDF/CSV
 import {
   exportPrestamosToCSV,
   exportPrestamosToPDF,
 } from "../utils/ExportPrestamosUtils";
-
-// Tipado para exportación personalizada
 import { PrestamoVista } from "../types/PrestamoVista";
-
-// Componente del formulario modal para crear préstamo
 import FormularioPrestamoModal from "../components/FormularioPrestamoModal";
 
-// Tipo que representa un préstamo desde el backend
+// Estructura del préstamo
 interface Prestamo {
   id: number;
   id_usuario: number;
@@ -30,37 +22,31 @@ interface Prestamo {
 }
 
 const Prestamos = () => {
-  // Estado de los préstamos
   const [prestamos, setPrestamos] = useState<Prestamo[]>([]);
   const [filtro, setFiltro] = useState<string>("todos");
   const [alerta, setAlerta] = useState<string | null>(null);
   const [mostrarModal, setMostrarModal] = useState(false);
 
-  // Cargar préstamos desde backend
+  // Obtener préstamos desde backend
   const obtenerPrestamos = async () => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/prestamos`
-      );
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/prestamos`);
       const data = await res.json();
-      setPrestamos(data); // Actualiza la lista
+      setPrestamos(data);
     } catch (error) {
       console.error("Error al cargar préstamos:", error);
     }
   };
 
-  // Llama la función al montar el componente
   useEffect(() => {
     obtenerPrestamos();
   }, []);
 
-  // Filtrado por estado
   const prestamosFiltrados =
     filtro === "todos"
       ? prestamos
       : prestamos.filter((p) => p.estado === filtro);
 
-  // Mapea a la estructura esperada para exportación
   const prestamosVista: PrestamoVista[] = prestamosFiltrados.map((p) => ({
     id: p.id,
     nombreSocio: p.nombre_usuario,
@@ -73,12 +59,9 @@ const Prestamos = () => {
 
   return (
     <div className="min-h-screen px-6 py-10 lg:pl-64 bg-gray-50 animate-fade-in">
-      {/* Título */}
-      <h1 className="text-2xl font-bold text-blue-700 mb-6">
-        Gestión de Préstamos
-      </h1>
+      <h1 className="text-2xl font-bold text-blue-700 mb-6">Gestión de Préstamos</h1>
 
-      {/* Filtros y Acciones */}
+      {/* Filtros y acciones */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <select
           value={filtro}
@@ -92,15 +75,13 @@ const Prestamos = () => {
         </select>
 
         <div className="flex gap-2">
-          {/* Botón para abrir modal */}
           <button
             onClick={() => setMostrarModal(true)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm"
+            className="bg-primary hover:bg-primary-darker text-white px-4 py-2 rounded text-sm"
           >
             Crear Préstamo
           </button>
 
-          {/* Botones de exportación */}
           <button
             onClick={() => exportPrestamosToPDF(prestamosVista)}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
@@ -116,7 +97,6 @@ const Prestamos = () => {
         </div>
       </div>
 
-      {/* Alerta de confirmación */}
       {alerta && (
         <div className="bg-green-100 text-green-800 p-2 rounded mb-4 text-sm">
           {alerta}
@@ -143,13 +123,9 @@ const Prestamos = () => {
                 <td className="px-4 py-2">{p.id}</td>
                 <td className="px-4 py-2">{p.nombre_usuario}</td>
                 <td className="px-4 py-2">{p.tipo_prestamo}</td>
-                <td className="px-4 py-2">
-                  ${p.monto.toLocaleString("es-CO")}
-                </td>
+                <td className="px-4 py-2">${p.monto.toLocaleString("es-CO")}</td>
                 <td className="px-4 py-2">{p.cuotas_total}</td>
-                <td className="px-4 py-2">
-                  {format(new Date(p.fecha_inicio), "yyyy-MM-dd")}
-                </td>
+                <td className="px-4 py-2">{format(new Date(p.fecha_inicio), "yyyy-MM-dd")}</td>
                 <td className="px-4 py-2 capitalize">{p.estado}</td>
               </tr>
             ))}
@@ -158,11 +134,16 @@ const Prestamos = () => {
       </div>
 
       {/* Modal para nuevo préstamo */}
-      <FormularioPrestamoModal
-        visible={mostrarModal}
-        onClose={() => setMostrarModal(false)}
-        onSuccess={obtenerPrestamos}
-      />
+      {mostrarModal && (
+        <FormularioPrestamoModal
+          visible={mostrarModal}
+          onClose={() => setMostrarModal(false)}
+          onSuccess={() => {
+            setMostrarModal(false);
+            obtenerPrestamos();
+          }}
+        />
+      )}
     </div>
   );
 };

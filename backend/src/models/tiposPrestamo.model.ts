@@ -10,11 +10,11 @@ export interface TipoPrestamo {
 
 // Obtener todos los tipos de préstamo
 export const obtenerTiposPrestamo = async (): Promise<TipoPrestamo[]> => {
-  const result = await pool.query('SELECT * FROM tipos_prestamo');
+  const result = await pool.query('SELECT * FROM tipos_prestamos');
   return result.rows;
 };
 
 // Crear un nuevo tipo de préstamo
 export const crearTipoPrestamo = async (tipo: TipoPrestamo): Promise<void> => {
-  await pool.query('INSERT INTO tipos_prestamo (nombre) VALUES ($1)', [tipo.nombre]);
+  await pool.query('INSERT INTO tipos_prestamos (nombre) VALUES ($1)', [tipo.nombre]);
 };
