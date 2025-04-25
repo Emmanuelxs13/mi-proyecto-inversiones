@@ -13,12 +13,12 @@ const AddSocioModal: React.FC<AddSocioModalProps> = ({ onAdd, onClose }) => {
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [pais, setPais] = useState("");
+  const [direccion, setdireccion] = useState("");
 
   // Manejador del formulario
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nombre || !correo || !telefono || !pais) {
+    if (!nombre || !correo || !telefono || !direccion) {
       alert("Todos los campos son obligatorios.");
       return;
     }
@@ -28,7 +28,7 @@ const AddSocioModal: React.FC<AddSocioModalProps> = ({ onAdd, onClose }) => {
       nombre,
       correo,
       telefono,
-      pais,
+      direccion,
       foto: "https://via.placeholder.com/50", // Foto por defecto
     };
 
@@ -68,8 +68,8 @@ const AddSocioModal: React.FC<AddSocioModalProps> = ({ onAdd, onClose }) => {
         <input
           type="text"
           placeholder="País"
-          value={pais}
-          onChange={(e) => setPais(e.target.value)}
+          value={direccion}
+          onChange={(e) => setdireccion(e.target.value)}
           className="w-full border rounded px-3 py-2 mb-3"
         />
 

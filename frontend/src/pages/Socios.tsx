@@ -57,7 +57,7 @@ const Socios = () => {
         nombre: `${user.name.first} ${user.name.last}`,
         correo: user.email,
         telefono: user.phone,
-        pais: user.location.country,
+        direccion: user.location.country,
         foto: user.picture.thumbnail,
       }));
 
@@ -74,7 +74,7 @@ const Socios = () => {
 
   // Funciones CRUD básicas
   const verSocio = (socio: Socio) => {
-    alert(`Socio: ${socio.nombre}\nEmail: ${socio.correo}\nPaís: ${socio.pais}`);
+    alert(`Socio: ${socio.nombre}\nEmail: ${socio.correo}\nPaís: ${socio.direccion}`);
   };
 
   const editarSocio = (socio: Socio) => {
@@ -105,7 +105,7 @@ const Socios = () => {
       nombre: "Nuevo Socio",
       correo: "correo@ejemplo.com",
       telefono: "000-000-0000",
-      pais: "Colombia",
+      direccion: "Colombia",
       foto: "https://via.placeholder.com/48",
     };
   

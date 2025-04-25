@@ -26,7 +26,7 @@ export const getSocios = async (cantidad: number = 10): Promise<Socio[]> => {
       nombre: `${user.name.first} ${user.name.last}`, // Unimos nombre y apellido
       correo: user.email, // Correo electrónico
       telefono: user.phone, // Número telefónico
-      pais: user.location.country, // País
+      direccion: user.location.country, // País
       foto: user.picture.thumbnail, // URL de la foto
     }));
 
