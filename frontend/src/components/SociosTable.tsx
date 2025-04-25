@@ -73,7 +73,7 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
                 <td className="px-4 py-2 text-gray-800">{socio.nombre}</td>
                 <td className="px-4 py-2 text-gray-600">{socio.correo}</td>
                 <td className="px-4 py-2 text-gray-600">{socio.telefono}</td>
-                <td className="px-4 py-2 text-gray-600">{socio.pais}</td>
+                <td className="px-4 py-2 text-gray-600">{socio.direccion}</td>
                 <td className="px-4 py-2 space-x-2 whitespace-nowrap">
                   <button
                     onClick={() => abrirModal("ver", socio)}
@@ -115,7 +115,7 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
               <div className="text-sm text-gray-600 space-y-1">
                 <p><strong>Correo:</strong> {socio.correo}</p>
                 <p><strong>Teléfono:</strong> {socio.telefono}</p>
-                <p><strong>País:</strong> {socio.pais}</p>
+                <p><strong>País:</strong> {socio.direccion}</p>
               </div>
               <div className="flex justify-end gap-2 mt-4">
                 <button
@@ -151,7 +151,7 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
             <p><strong>Nombre:</strong> {socioActivo.nombre}</p>
             <p><strong>Correo:</strong> {socioActivo.correo}</p>
             <p><strong>Teléfono:</strong> {socioActivo.telefono}</p>
-            <p><strong>País:</strong> {socioActivo.pais}</p>
+            <p><strong>País:</strong> {socioActivo.direccion}</p>
             <button
               className="mt-4 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
               onClick={cerrarModal}
@@ -182,9 +182,9 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
               defaultValue={socioActivo.telefono}
               placeholder="Teléfono"
             />
-            <input  id="pais"
+            <input  id="direccion"
               className="w-full border rounded px-3 py-2 mb-2"
-              defaultValue={socioActivo.pais}
+              defaultValue={socioActivo.direccion}
               placeholder="País"
             />
             <div className="flex justify-between">
@@ -204,7 +204,7 @@ const SociosTable: React.FC<SociosTableProps> = ({ socios, onDelete, onEdit, onA
                       nombre: (document.getElementById("nombre") as HTMLInputElement).value,
                       correo: (document.getElementById("correo") as HTMLInputElement).value,
                       telefono: (document.getElementById("telefono") as HTMLInputElement).value,
-                      pais: (document.getElementById("pais") as HTMLInputElement).value,
+                      direccion: (document.getElementById("direccion") as HTMLInputElement).value,
                     };
                     onEdit(socioEditado); // ✅ Llama al padre
                     cerrarModal();

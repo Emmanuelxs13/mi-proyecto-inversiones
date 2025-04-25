@@ -6,7 +6,7 @@ export interface Socio {
     nombre: string;
     correo: string;
     telefono: string;
-    pais: string;
+    direccion: string;
     foto: string;
   }
   

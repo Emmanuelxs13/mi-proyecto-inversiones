@@ -1,14 +1,7 @@
-// src/routes/tiposPrestamo.routes.ts
-
-import { Router } from 'express';
-import {
-  getTiposPrestamo,
-  postTipoPrestamo,
-} from '../controllers/tiposPrestamo.controller';
+import { Router } from "express";
+import { getTiposPrestamo } from "../controllers/tiposPrestamo.controller";
 
 const router = Router();
-
-router.get('/', getTiposPrestamo);
-router.post('/', postTipoPrestamo);
+router.get("/", getTiposPrestamo); // /api/tipos-prestamos
 
 export default router;
