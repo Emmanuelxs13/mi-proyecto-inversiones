@@ -8,10 +8,14 @@ import { crearPrestamoConCuotas, obtenerPrestamos } from "../models/prestamos.mo
 export const getPrestamos = async (_req: Request, res: Response) => {
   try {
     const prestamos = await obtenerPrestamos();
+    console.log("✅ Préstamos encontrados:", prestamos.length); // <-- LOG
     res.json(prestamos);
-  } catch (error) {
-    console.error("Error al obtener préstamos:", error);
-    res.status(500).json({ error: "Error al obtener préstamos" });
+  } catch (error: any) {
+    console.error("❌ Error real al obtener préstamos:", error.message);
+    res.status(500).json({
+      error: "Error al obtener préstamos",
+      detalle: error.message || "Error desconocido",
+    });
   }
 };
 
@@ -88,3 +92,49 @@ export const postPrestamoCompleto = async (req: Request, res: Response): Promise
     });
   }
 }
+
+// Editar préstamo
+export const putPrestamo = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { monto, cuotas, tipoPrestamo } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE prestamos
+       SET monto = $1, cuotas_total = $2, id_tipo_prestamo = $3
+       WHERE id = $4 RETURNING *`,
+      [monto, cuotas, tipoPrestamo, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Préstamo no encontrado" });
+    }
+
+    res.json({ mensaje: "Préstamo actualizado correctamente", data: result.rows[0] });
+  } catch (error) {
+    console.error("Error al editar préstamo:", error);
+    res.status(500).json({ error: "Error al editar préstamo" });
+  }
+};
+
+// Eliminar préstamo
+export const deletePrestamo = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      `DELETE FROM prestamos WHERE id = $1 RETURNING *`,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Préstamo no encontrado" });
+    }
+
+    res.json({ mensaje: "Préstamo eliminado correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar préstamo:", error);
+    res.status(500).json({ error: "Error al eliminar préstamo" });
+  }
+};
+

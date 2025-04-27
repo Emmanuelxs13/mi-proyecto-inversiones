@@ -65,21 +65,26 @@ export const crearPrestamoConCuotas = async (prestamo: Prestamo): Promise<void> 
  * Consulta todos los préstamos con nombres reales
  */
 export const obtenerPrestamos = async () => {
-  const result = await pool.query(`
-    SELECT 
-      p.id,
-      p.id_usuario,
-      u.nombre AS nombre_usuario,
-      p.id_tipo_prestamo,
-      tp.nombre AS tipo_prestamo,
-      p.monto,
-      p.cuotas_total,
-      p.fecha_inicio,
-      p.estado
-    FROM prestamos p
-    JOIN usuarios u ON p.id_usuario = u.id
-    JOIN tipos_prestamos tp ON p.id_tipo_prestamo = tp.id
-    ORDER BY p.id DESC
-  `);
-  return result.rows;
+  try {
+    const result = await pool.query(`
+      SELECT 
+        p.id,
+        p.id_usuario,
+        u.nombre AS nombre_usuario,
+        p.id_tipo_prestamo,
+        tp.nombre AS tipo_prestamo,
+        p.monto,
+        p.cuotas_total,
+        p.fecha_inicio,
+        p.estado
+      FROM prestamos p
+      INNER JOIN usuarios u ON p.id_usuario = u.id
+      INNER JOIN tipos_prestamos tp ON p.id_tipo_prestamo = tp.id
+      ORDER BY p.id DESC
+    `);
+    return result.rows;
+  } catch (error: any) {
+    console.error("❌ Error en obtenerPrestamos():", error.message);
+    throw error;
+  }
 };

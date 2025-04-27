@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-
 import {
   exportPrestamosToCSV,
   exportPrestamosToPDF,
@@ -30,7 +29,9 @@ const Prestamos = () => {
   // Obtener préstamos desde backend
   const obtenerPrestamos = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/prestamos`);
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/prestamos`
+      );
       const data = await res.json();
       setPrestamos(data);
     } catch (error) {
@@ -57,9 +58,54 @@ const Prestamos = () => {
     estado: p.estado,
   }));
 
+  // Función para asignar colores a los estados
+  const getStatusColor = (estado: string) => {
+    switch (estado) {
+      case "vigente":
+        return "bg-green-200 text-green-800"; // Vigente: verde pastel
+      case "pendiente":
+        return "bg-yellow-200 text-yellow-800"; // Pendiente: amarillo pastel
+      case "cancelado":
+        return "bg-red-200 text-red-800"; // Cancelado: rojo pastel
+      default:
+        return "bg-gray-200 text-gray-800"; // Por defecto, gris pastel
+    }
+  };
+
+  // Eliminar préstamo
+  const handleDelete = async (id: number) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/prestamos/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      setAlerta(data.mensaje || "Préstamo eliminado correctamente");
+      setPrestamos(prestamos.filter((p) => p.id !== id)); // Actualiza el listado
+    } catch (error) {
+      console.error("Error al eliminar préstamo:", error);
+    }
+  };
+
+  // Redirigir a la página de edición
+  const handleEdit = (id: number) => {
+    // Aquí puedes usar un modal o redirigir a una página de edición, como desees.
+    console.log("Editar préstamo ID:", id);
+  };
+
+  // Redirigir a los detalles del préstamo
+  const handleView = (id: number) => {
+    // Similar a la edición, puedes redirigir a una vista de detalles del préstamo
+    console.log("Ver detalles del préstamo ID:", id);
+  };
+
   return (
     <div className="min-h-screen px-6 py-10 lg:pl-64 bg-gray-50 animate-fade-in">
-      <h1 className="text-2xl font-bold text-blue-700 mb-6">Gestión de Préstamos</h1>
+      <h1 className="text-2xl font-bold text-blue-700 mb-6">
+        Gestión de Préstamos
+      </h1>
 
       {/* Filtros y acciones */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
@@ -90,7 +136,7 @@ const Prestamos = () => {
           </button>
           <button
             onClick={() => exportPrestamosToCSV(prestamosVista)}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
+            className="bg-green-800 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
           >
             Exportar CSV
           </button>
@@ -106,7 +152,7 @@ const Prestamos = () => {
       {/* Tabla de préstamos */}
       <div className="overflow-x-auto bg-white rounded shadow">
         <table className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-blue-600 text-white">
+          <thead className="bg-primary-darker text-white">
             <tr>
               <th className="px-4 py-2 text-left">ID</th>
               <th className="px-4 py-2 text-left">Socio</th>
@@ -115,6 +161,7 @@ const Prestamos = () => {
               <th className="px-4 py-2 text-left">Cuotas</th>
               <th className="px-4 py-2 text-left">Inicio</th>
               <th className="px-4 py-2 text-left">Estado</th>
+              <th className="px-4 py-2 text-left">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -123,10 +170,40 @@ const Prestamos = () => {
                 <td className="px-4 py-2">{p.id}</td>
                 <td className="px-4 py-2">{p.nombre_usuario}</td>
                 <td className="px-4 py-2">{p.tipo_prestamo}</td>
-                <td className="px-4 py-2">${p.monto.toLocaleString("es-CO")}</td>
+                <td className="px-4 py-2">
+                  ${p.monto.toLocaleString("es-CO")}
+                </td>
                 <td className="px-4 py-2">{p.cuotas_total}</td>
-                <td className="px-4 py-2">{format(new Date(p.fecha_inicio), "yyyy-MM-dd")}</td>
-                <td className="px-4 py-2 capitalize">{p.estado}</td>
+                <td className="px-4 py-2">
+                  {format(new Date(p.fecha_inicio), "yyyy-MM-dd")}
+                </td>
+                <td
+                  className={`px-4 py-2 mt-2 capitalize ${getStatusColor(
+                    p.estado
+                  )} rounded-full text-xs inline-block px-3`}
+                >
+                  {p.estado}
+                </td>
+                <td className="px-4 py-2">
+                  <button
+                    onClick={() => handleView(p.id)}
+                    className="bg-accent hover:bg-primary-darker text-white px-4 py-2 rounded-md mr-2"
+                  >
+                    Ver
+                  </button>
+                  <button
+                    onClick={() => handleEdit(p.id)}
+                    className="bg-green-800 hover:bg-green-700 text-white px-4 py-2 rounded-md mr-2"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(p.id)}
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                  >
+                    Eliminar
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
