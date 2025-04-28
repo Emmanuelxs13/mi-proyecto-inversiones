@@ -43,6 +43,10 @@ export default function Sidebar() {
           <Link to="/prestamos" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
             <FileText size={18} /> Préstamos
           </Link>
+
+          <Link to="/afiliaciones" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
+            <FileText size={18} /> Afiliaciones
+          </Link>
           
           <Link to="/contacto" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-blue-600 transition">
             <PhoneCall size={18} /> Contacto
