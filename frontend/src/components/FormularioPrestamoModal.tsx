@@ -32,14 +32,19 @@ const FormularioPrestamoModal = ({ visible, onClose, onSuccess }: Props) => {
   const [mensaje, setMensaje] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tipos-prestamos`)
-      .then((res) => res.json())
-      .then(setTipos)
-      .catch(() => setMensaje("❌ Error al cargar tipos de préstamo"));
+    const cargarTiposPrestamo = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tipos-prestamos`);
+        const data = await res.json();
+        setTipos(data);
+      } catch {
+        setMensaje("❌ Error al cargar tipos de préstamo.");
+      }
+    };
+    cargarTiposPrestamo();
   }, []);
 
-  const esCorreoValido = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const esCorreoValido = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const manejarSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,27 +53,22 @@ const FormularioPrestamoModal = ({ visible, onClose, onSuccess }: Props) => {
       setMensaje("⚠️ El nombre debe tener al menos 3 caracteres.");
       return;
     }
-
     if (!correo || !esCorreoValido(correo)) {
       setMensaje("⚠️ Ingresa un correo electrónico válido.");
       return;
     }
-
     if (!telefono.match(/^[0-9]{7,15}$/)) {
       setMensaje("⚠️ El teléfono debe tener entre 7 y 15 dígitos.");
       return;
     }
-
     if (!direccion || direccion.length < 3) {
       setMensaje("⚠️ La dirección es obligatoria.");
       return;
     }
-
     if (!tipoPrestamo || tipoPrestamo === 0) {
       setMensaje("⚠️ Selecciona un tipo de préstamo.");
       return;
     }
-
     if (monto <= 0 || cuotas <= 0) {
       setMensaje("⚠️ El monto y las cuotas deben ser mayores a cero.");
       return;
@@ -93,10 +93,10 @@ const FormularioPrestamoModal = ({ visible, onClose, onSuccess }: Props) => {
       if (!res.ok) throw new Error("Error al registrar préstamo");
 
       setMensaje("✅ Préstamo registrado con éxito.");
-      onSuccess();
+      onSuccess(); // Refrescar lista de préstamos
       setTimeout(() => {
         setMensaje(null);
-        onClose();
+        onClose(); // Cerrar modal
       }, 2000);
     } catch (error) {
       console.error(error);
@@ -122,12 +122,14 @@ const FormularioPrestamoModal = ({ visible, onClose, onSuccess }: Props) => {
         )}
 
         <form onSubmit={manejarSubmit} className="grid grid-cols-2 gap-4">
+          {/* Campos de entrada */}
           <input value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre completo *" required className="col-span-2 border px-3 py-2 rounded" />
           <input value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder="Correo electrónico *" type="email" required className="col-span-2 border px-3 py-2 rounded" />
           <input value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholder="Teléfono *" required className="border px-3 py-2 rounded" />
           <input value={direccion} onChange={(e) => setDireccion(e.target.value)} placeholder="Dirección *" required className="border px-3 py-2 rounded" />
           <input value={foto} onChange={(e) => setFoto(e.target.value)} placeholder="URL de foto" className="col-span-2 border px-3 py-2 rounded" />
 
+          {/* Selección de tipo de préstamo */}
           <select value={tipoPrestamo} onChange={(e) => setTipoPrestamo(Number(e.target.value))} required className="col-span-2 border px-3 py-2 rounded">
             <option value={0} disabled>Seleccione un tipo de préstamo *</option>
             {tipos.map((t) => (
@@ -135,6 +137,7 @@ const FormularioPrestamoModal = ({ visible, onClose, onSuccess }: Props) => {
             ))}
           </select>
 
+          {/* Monto y cuotas */}
           <input
             type="text"
             inputMode="numeric"
@@ -148,7 +151,6 @@ const FormularioPrestamoModal = ({ visible, onClose, onSuccess }: Props) => {
             required
             className="border px-3 py-2 rounded"
           />
-
           <input
             type="text"
             inputMode="numeric"
@@ -169,6 +171,7 @@ const FormularioPrestamoModal = ({ visible, onClose, onSuccess }: Props) => {
             {cuotas > 0 && <p><strong>Cuotas:</strong> {formatoNumerico.format(cuotas)}</p>}
           </div>
 
+          {/* Botones */}
           <div className="col-span-2 flex justify-between mt-4">
             <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Registrar</button>
             <button type="button" onClick={onClose} className="text-gray-600 hover:underline">Cancelar</button>

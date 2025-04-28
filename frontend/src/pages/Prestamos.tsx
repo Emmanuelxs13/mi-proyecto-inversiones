@@ -21,18 +21,21 @@ interface Prestamo {
 }
 
 const Prestamos = () => {
-  const [prestamos, setPrestamos] = useState<Prestamo[]>([]);
-  const [filtro, setFiltro] = useState<string>("todos");
-  const [alerta, setAlerta] = useState<string | null>(null);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [prestamos, setPrestamos] = useState<Prestamo[]>([]); // Estado para almacenar los préstamos
+  const [filtro, setFiltro] = useState<string>("todos"); // Estado para los filtros de préstamos
+  const [alerta, setAlerta] = useState<string | null>(null); // Estado para mostrar alertas
+  const [mostrarModal, setMostrarModal] = useState(false); // Estado para controlar la visibilidad del modal
+  const [modalData, setModalData] = useState<Prestamo | null>(null); // Estado para almacenar los datos del préstamo que se verán o editarán
+  const [modoEdicion, setModoEdicion] = useState<boolean>(false); // Estado para determinar si el modal es en modo edición o solo visualización
 
-  // Obtener préstamos desde backend
+  // Obtener los préstamos desde el backend
   const obtenerPrestamos = async () => {
     try {
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/prestamos`
       );
       const data = await res.json();
+      console.log(data); // Verifica los datos obtenidos
       setPrestamos(data);
     } catch (error) {
       console.error("Error al cargar préstamos:", error);
@@ -40,14 +43,16 @@ const Prestamos = () => {
   };
 
   useEffect(() => {
-    obtenerPrestamos();
+    obtenerPrestamos(); // Obtiene los préstamos al cargar el componente
   }, []);
 
+  // Filtrar los préstamos según el estado
   const prestamosFiltrados =
     filtro === "todos"
       ? prestamos
       : prestamos.filter((p) => p.estado === filtro);
 
+  // Crear una vista específica para los préstamos
   const prestamosVista: PrestamoVista[] = prestamosFiltrados.map((p) => ({
     id: p.id,
     nombreSocio: p.nombre_usuario,
@@ -72,7 +77,7 @@ const Prestamos = () => {
     }
   };
 
-  // Eliminar préstamo
+  // Eliminar un préstamo
   const handleDelete = async (id: number) => {
     try {
       const res = await fetch(
@@ -82,30 +87,36 @@ const Prestamos = () => {
         }
       );
       const data = await res.json();
-      setAlerta(data.mensaje || "Préstamo eliminado correctamente");
-      setPrestamos(prestamos.filter((p) => p.id !== id)); // Actualiza el listado
+      setAlerta(data.mensaje || "Préstamo eliminado correctamente"); // Muestra un mensaje de éxito
+      setPrestamos(prestamos.filter((p) => p.id !== id)); // Actualiza el listado de préstamos
     } catch (error) {
       console.error("Error al eliminar préstamo:", error);
     }
   };
 
-  // Redirigir a la página de edición
-  const handleEdit = (id: number) => {
-    // Aquí puedes usar un modal o redirigir a una página de edición, como desees.
-    console.log("Editar préstamo ID:", id);
+  // Abrir el modal en modo ver (solo lectura)
+  const handleView = (id: number) => {
+    const prestamo = prestamos.find((p) => p.id === id); // Busca el préstamo por ID
+    if (prestamo) {
+      setModalData(prestamo); // Establece los datos del préstamo en el estado
+      setModoEdicion(false); // Establece que es solo visualización
+      setMostrarModal(true); // Abre el modal
+    }
   };
 
-  // Redirigir a los detalles del préstamo
-  const handleView = (id: number) => {
-    // Similar a la edición, puedes redirigir a una vista de detalles del préstamo
-    console.log("Ver detalles del préstamo ID:", id);
+  // Abrir el modal en modo editar
+  const handleEdit = (id: number) => {
+    const prestamo = prestamos.find((p) => p.id === id); // Busca el préstamo por ID
+    if (prestamo) {
+      setModalData(prestamo); // Establece los datos del préstamo en el estado
+      setModoEdicion(true); // Establece que es modo edición
+      setMostrarModal(true); // Abre el modal
+    }
   };
 
   return (
     <div className="min-h-screen px-6 py-10 lg:pl-64 bg-gray-50 animate-fade-in">
-      <h1 className="text-2xl font-bold text-blue-700 mb-6">
-        Gestión de Préstamos
-      </h1>
+      <h1 className="text-2xl font-bold text-blue-700 mb-6">Gestión de Préstamos</h1>
 
       {/* Filtros y acciones */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
@@ -210,7 +221,7 @@ const Prestamos = () => {
         </table>
       </div>
 
-      {/* Modal para nuevo préstamo */}
+      {/* Modal para ver o editar préstamo */}
       {mostrarModal && (
         <FormularioPrestamoModal
           visible={mostrarModal}
@@ -219,6 +230,8 @@ const Prestamos = () => {
             setMostrarModal(false);
             obtenerPrestamos();
           }}
+          prestamo={modalData}
+          modoEdicion={modoEdicion} // Se pasa el estado de edición
         />
       )}
     </div>
