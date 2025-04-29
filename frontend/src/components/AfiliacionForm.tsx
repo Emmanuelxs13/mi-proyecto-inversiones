@@ -385,6 +385,118 @@ export default function AfiliacionForm() {
         </Dropzone>
       </div>
 
+      {/* Información Laboral */}
+      <h2 className="text-2xl font-semibold text-gray-700 col-span-2 mt-12 border-b pb-2">
+        Información Laboral
+      </h2>
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="sede" className="text-sm font-medium text-gray-700">
+          Sede / ERON / Regional o EPN
+        </label>
+        <input
+          id="sede"
+          {...register("sede")}
+          className="input input-bordered w-full"
+          placeholder="Ej: ERON Bogotá"
+        />
+        {errors.sede && (
+          <p className="text-red-500 text-xs">{errors.sede.message}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="direccionLaboral"
+          className="text-sm font-medium text-gray-700"
+        >
+          Dirección Laboral
+        </label>
+        <input
+          id="direccionLaboral"
+          {...register("direccionLaboral")}
+          className="input input-bordered w-full"
+          placeholder="Dirección completa de la sede"
+        />
+        {errors.direccionLaboral && (
+          <p className="text-red-500 text-xs">
+            {errors.direccionLaboral.message}
+          </p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="telefonoLaboral"
+          className="text-sm font-medium text-gray-700"
+        >
+          Teléfono Laboral
+        </label>
+        <input
+          id="telefonoLaboral"
+          {...register("telefonoLaboral")}
+          className="input input-bordered w-full"
+          placeholder="Ej: 6014567890"
+        />
+        {errors.telefonoLaboral && (
+          <p className="text-red-500 text-xs">
+            {errors.telefonoLaboral.message}
+          </p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="sueldoMensual"
+          className="text-sm font-medium text-gray-700"
+        >
+          Sueldo Mensual
+        </label>
+        <input
+          id="sueldoMensual"
+          type="number"
+          {...register("sueldoMensual")}
+          className="input input-bordered w-full"
+          placeholder="$ COP"
+        />
+        {errors.sueldoMensual && (
+          <p className="text-red-500 text-xs">{errors.sueldoMensual.message}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="eps" className="text-sm font-medium text-gray-700">
+          EPS
+        </label>
+        <input
+          id="eps"
+          {...register("eps")}
+          className="input input-bordered w-full"
+          placeholder="Nombre de la EPS"
+        />
+        {errors.eps && (
+          <p className="text-red-500 text-xs">{errors.eps.message}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="fondoPension"
+          className="text-sm font-medium text-gray-700"
+        >
+          Fondo de Pensiones
+        </label>
+        <input
+          id="fondoPension"
+          {...register("fondoPension")}
+          className="input input-bordered w-full"
+          placeholder="Nombre del fondo de pensiones"
+        />
+        {errors.fondoPension && (
+          <p className="text-red-500 text-xs">{errors.fondoPension.message}</p>
+        )}
+      </div>
+
       <div className="col-span-2">
         <button
           type="submit"
