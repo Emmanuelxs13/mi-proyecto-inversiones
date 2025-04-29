@@ -10,6 +10,7 @@ import Simulator from "./pages/Simulator"; // O como lo tengas nombrado
 import HistorialSimulaciones from "./pages/HistorialSimulaciones";
 import Estadisticas from "./pages/Estadisticas";
 import Prestamos from "./pages/Prestamos";
+import AfiliacionForm from "./components/AfiliacionForm";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route path="historial" element={<HistorialSimulaciones />} />
           <Route path="estadisticas" element={<Estadisticas />} />
           <Route path="prestamos" element={<Prestamos />} />
+          <Route path="afiliaciones" element={<AfiliacionForm />} />
+
         </Route>
       </Routes>
     </Router>
