@@ -3,11 +3,14 @@ import { useState } from "react";
 import {
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
+  esquemaVivienda, 
+  esquemaLaboral,
 } from "./helpers/afiliacionSchema";
 import * as yup from "yup";
 import DatosPersonalesSection from "./sections/DatosPersonalesSection";
 import FormacionAcademicaSection from "./sections/FormacionAcademicaSection";
 import ViviendaSection from "./sections/ViviendaSection"; 
+import InformacionLaboralSection from "./sections/InformacionLaboralSection";
 
 // Define la estructura de cada paso del formulario
 interface Paso {
@@ -23,12 +26,14 @@ const pasos: Paso[] = [
   { id: 0, nombre: "Datos Personales", componente: DatosPersonalesSection },
   { id: 1, nombre: "Formación Académica", componente: FormacionAcademicaSection },
   { id: 2, nombre: "Información de Vivienda", componente: ViviendaSection },
+  { id: 3, nombre: "Información Laboral", componente: InformacionLaboralSection },
 ];
 
 const esquemas: yup.AnySchema[] = [
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
   esquemaVivienda, 
+  esquemaLaboral,
 ];
 
 export default function AfiliacionForm() {
