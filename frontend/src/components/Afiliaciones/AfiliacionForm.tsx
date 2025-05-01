@@ -14,6 +14,7 @@ import ViviendaSection from "./sections/ViviendaSection";
 import InformacionLaboralSection from "./sections/InformacionLaboralSection";
 import BeneficiariosSection from "./sections/BeneficiariosSection";
 import FirmaYCedulaSection from "./sections/FirmaYCedulaSection";
+import AutorizacionDescuentoSection from "./sections/AutorizacionDescuentoSection";
 
 // Define la estructura de cada paso del formulario
 interface Paso {
@@ -33,6 +34,7 @@ const pasos: Paso[] = [
   { id: 3, nombre: "Información Laboral", componente: InformacionLaboralSection },
   { id: 4, nombre: "Beneficiarios", componente: BeneficiariosSection },
   { id: 5, nombre: "Firma y Cédula", componente: FirmaYCedulaSection },
+  { id: 6, nombre: "Autorización de Descuento", componente: AutorizacionDescuentoSection },
 ];
 
 const esquemas: yup.AnySchema[] = [
@@ -41,7 +43,19 @@ const esquemas: yup.AnySchema[] = [
   esquemaVivienda,
   esquemaLaboral,
   esquemaBeneficiarios,
-  yup.object(), // Temporal para Firma y Cédula, se puede extender con validaciones específicas
+  yup.object(),
+  yup.object({
+    porcentajeDescuento: yup
+      .number()
+      .typeError("Debe ser un número")
+      .min(3, "Mínimo 3%")
+      .max(10, "Máximo 10%")
+      .required("Porcentaje obligatorio"),
+    aceptaAutorizacion: yup
+      .boolean()
+      .oneOf([true], "Debe aceptar la autorización")
+      .required("Campo obligatorio"),
+  }),
 ];
 
 export default function AfiliacionForm() {
