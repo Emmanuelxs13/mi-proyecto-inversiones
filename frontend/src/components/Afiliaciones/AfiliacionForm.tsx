@@ -1,16 +1,19 @@
-import { useForm, FieldValues, UseFormRegister, FieldErrors } from "react-hook-form";
+import { useForm, FieldValues, UseFormRegister, FieldErrors, Control } from "react-hook-form";
 import { useState } from "react";
 import {
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
-  esquemaVivienda, 
+  esquemaVivienda,
   esquemaLaboral,
+  esquemaBeneficiarios,
 } from "./helpers/afiliacionSchema";
 import * as yup from "yup";
 import DatosPersonalesSection from "./sections/DatosPersonalesSection";
 import FormacionAcademicaSection from "./sections/FormacionAcademicaSection";
-import ViviendaSection from "./sections/ViviendaSection"; 
+import ViviendaSection from "./sections/ViviendaSection";
 import InformacionLaboralSection from "./sections/InformacionLaboralSection";
+import BeneficiariosSection from "./sections/BeneficiariosSection";
+import FirmaYCedulaSection from "./sections/FirmaYCedulaSection";
 
 // Define la estructura de cada paso del formulario
 interface Paso {
@@ -19,6 +22,7 @@ interface Paso {
   componente: React.FC<{
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors<FieldValues>;
+    control: Control<FieldValues>;
   }>;
 }
 
@@ -27,13 +31,17 @@ const pasos: Paso[] = [
   { id: 1, nombre: "Formación Académica", componente: FormacionAcademicaSection },
   { id: 2, nombre: "Información de Vivienda", componente: ViviendaSection },
   { id: 3, nombre: "Información Laboral", componente: InformacionLaboralSection },
+  { id: 4, nombre: "Beneficiarios", componente: BeneficiariosSection },
+  { id: 5, nombre: "Firma y Cédula", componente: FirmaYCedulaSection },
 ];
 
 const esquemas: yup.AnySchema[] = [
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
-  esquemaVivienda, 
+  esquemaVivienda,
   esquemaLaboral,
+  esquemaBeneficiarios,
+  yup.object(), // Temporal para Firma y Cédula, se puede extender con validaciones específicas
 ];
 
 export default function AfiliacionForm() {
@@ -48,6 +56,7 @@ export default function AfiliacionForm() {
     clearErrors,
     getValues,
     trigger,
+    control,
     formState: { errors },
   } = useForm<FieldValues>({
     mode: "onTouched",
@@ -65,7 +74,7 @@ export default function AfiliacionForm() {
 
   const validarPasoActual = async (): Promise<boolean> => {
     const schema = esquemas[pasoActual];
-    const camposDelPaso = Object.keys(schema.fields);
+    const camposDelPaso = Object.keys(schema.fields ?? {});
     const esValido = await trigger(camposDelPaso);
 
     if (!esValido) {
@@ -101,7 +110,7 @@ export default function AfiliacionForm() {
       </h2>
 
       {/* Renderiza el componente correspondiente al paso actual */}
-      <PasoActualComponent register={register} errors={errors} />
+      <PasoActualComponent register={register} errors={errors} control={control} />
 
       {/* Navegación entre pasos */}
       <div className="flex justify-between mt-10">
