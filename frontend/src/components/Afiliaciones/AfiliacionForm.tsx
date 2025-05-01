@@ -7,6 +7,7 @@ import {
 import * as yup from "yup";
 import DatosPersonalesSection from "./sections/DatosPersonalesSection";
 import FormacionAcademicaSection from "./sections/FormacionAcademicaSection";
+import ViviendaSection from "./sections/ViviendaSection"; 
 
 // Define la estructura de cada paso del formulario
 interface Paso {
@@ -21,11 +22,13 @@ interface Paso {
 const pasos: Paso[] = [
   { id: 0, nombre: "Datos Personales", componente: DatosPersonalesSection },
   { id: 1, nombre: "Formación Académica", componente: FormacionAcademicaSection },
+  { id: 2, nombre: "Información de Vivienda", componente: ViviendaSection },
 ];
 
 const esquemas: yup.AnySchema[] = [
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
+  esquemaVivienda, 
 ];
 
 export default function AfiliacionForm() {
