@@ -1,12 +1,20 @@
-import { useForm, FieldValues, UseFormRegister, FieldErrors } from "react-hook-form";
+import { useForm, FieldValues, UseFormRegister, FieldErrors, Control } from "react-hook-form";
 import { useState } from "react";
 import {
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
+  esquemaVivienda,
+  esquemaLaboral,
+  esquemaBeneficiarios,
 } from "./helpers/afiliacionSchema";
 import * as yup from "yup";
 import DatosPersonalesSection from "./sections/DatosPersonalesSection";
 import FormacionAcademicaSection from "./sections/FormacionAcademicaSection";
+import ViviendaSection from "./sections/ViviendaSection";
+import InformacionLaboralSection from "./sections/InformacionLaboralSection";
+import BeneficiariosSection from "./sections/BeneficiariosSection";
+import FirmaYCedulaSection from "./sections/FirmaYCedulaSection";
+import AutorizacionDescuentoSection from "./sections/AutorizacionDescuentoSection";
 
 // Define la estructura de cada paso del formulario
 interface Paso {
@@ -15,17 +23,39 @@ interface Paso {
   componente: React.FC<{
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors<FieldValues>;
+    control: Control<FieldValues>;
   }>;
 }
 
 const pasos: Paso[] = [
   { id: 0, nombre: "Datos Personales", componente: DatosPersonalesSection },
   { id: 1, nombre: "Formación Académica", componente: FormacionAcademicaSection },
+  { id: 2, nombre: "Información de Vivienda", componente: ViviendaSection },
+  { id: 3, nombre: "Información Laboral", componente: InformacionLaboralSection },
+  { id: 4, nombre: "Beneficiarios", componente: BeneficiariosSection },
+  { id: 5, nombre: "Firma y Cédula", componente: FirmaYCedulaSection },
+  { id: 6, nombre: "Autorización de Descuento", componente: AutorizacionDescuentoSection },
 ];
 
 const esquemas: yup.AnySchema[] = [
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
+  esquemaVivienda,
+  esquemaLaboral,
+  esquemaBeneficiarios,
+  yup.object(),
+  yup.object({
+    porcentajeDescuento: yup
+      .number()
+      .typeError("Debe ser un número")
+      .min(3, "Mínimo 3%")
+      .max(10, "Máximo 10%")
+      .required("Porcentaje obligatorio"),
+    aceptaAutorizacion: yup
+      .boolean()
+      .oneOf([true], "Debe aceptar la autorización")
+      .required("Campo obligatorio"),
+  }),
 ];
 
 export default function AfiliacionForm() {
@@ -40,6 +70,7 @@ export default function AfiliacionForm() {
     clearErrors,
     getValues,
     trigger,
+    control,
     formState: { errors },
   } = useForm<FieldValues>({
     mode: "onTouched",
@@ -57,7 +88,7 @@ export default function AfiliacionForm() {
 
   const validarPasoActual = async (): Promise<boolean> => {
     const schema = esquemas[pasoActual];
-    const camposDelPaso = Object.keys(schema.fields);
+    const camposDelPaso = Object.keys(schema.fields ?? {});
     const esValido = await trigger(camposDelPaso);
 
     if (!esValido) {
@@ -93,7 +124,7 @@ export default function AfiliacionForm() {
       </h2>
 
       {/* Renderiza el componente correspondiente al paso actual */}
-      <PasoActualComponent register={register} errors={errors} />
+      <PasoActualComponent register={register} errors={errors} control={control} />
 
       {/* Navegación entre pasos */}
       <div className="flex justify-between mt-10">
