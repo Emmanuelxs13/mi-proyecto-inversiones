@@ -1,96 +1,99 @@
-import { FC } from "react";
+import React from "react";
 import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
 
-/**
- * Sección de Información de Vivienda para el formulario de afiliación.
- * Incluye campos como tipo de vivienda, dirección, ciudad y teléfonos.
- */
-const ViviendaSection: FC<{
+interface Props {
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
-}> = ({ register, errors }) => {
+}
+
+export default function ViviendaSection({ register, errors }: Props) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <h3 className="text-2xl font-semibold text-gray-700 col-span-2 border-b pb-2">
+    <div className="space-y-6">
+      <h3 className="text-xl font-semibold text-blue-800 border-b pb-2">
         Información de Vivienda
       </h3>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="tipoVivienda" className="text-sm font-medium text-gray-700">
-          Tipo de Vivienda
-        </label>
-        <select
-          id="tipoVivienda"
-          {...register("tipoVivienda")}
-          className="select select-bordered w-full"
-        >
-          <option value="">Selecciona una opción</option>
-          <option value="Propia">Propia</option>
-          <option value="Familiar">Familiar</option>
-          <option value="Arriendo">Arriendo</option>
-        </select>
-        {errors.tipoVivienda && (
-          <p className="text-red-500 text-xs">{errors.tipoVivienda.message as string}</p>
-        )}
-      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        {/* Tipo de Vivienda */}
+        <div className="flex flex-col">
+          <label htmlFor="tipoVivienda" className="font-medium text-gray-700">
+            Tipo de Vivienda
+          </label>
+          <select
+            id="tipoVivienda"
+            {...register("tipoVivienda")}
+            className="border-b border-gray-300 bg-transparent focus:outline-none focus:border-blue-500 transition-colors py-1"
+          >
+            <option value="">Selecciona tipo</option>
+            <option value="Propia">Propia</option>
+            <option value="Familiar">Familiar</option>
+            <option value="Arriendo">Arriendo</option>
+          </select>
+          {errors.tipoVivienda && (
+            <p className="text-sm text-red-500">{errors.tipoVivienda.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="direccionVivienda" className="text-sm font-medium text-gray-700">
-          Dirección
-        </label>
-        <input
-          id="direccionVivienda"
-          {...register("direccionVivienda")}
-          className="input input-bordered w-full"
-        />
-        {errors.direccionVivienda && (
-          <p className="text-red-500 text-xs">{errors.direccionVivienda.message as string}</p>
-        )}
-      </div>
+        {/* Dirección de Vivienda */}
+        <div className="flex flex-col">
+          <label htmlFor="direccionVivienda" className="font-medium text-gray-700">
+            Dirección de Vivienda
+          </label>
+          <input
+            id="direccionVivienda"
+            {...register("direccionVivienda")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.direccionVivienda && (
+            <p className="text-sm text-red-500">{errors.direccionVivienda.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="ciudadVivienda" className="text-sm font-medium text-gray-700">
-          Ciudad
-        </label>
-        <input
-          id="ciudadVivienda"
-          {...register("ciudadVivienda")}
-          className="input input-bordered w-full"
-        />
-        {errors.ciudadVivienda && (
-          <p className="text-red-500 text-xs">{errors.ciudadVivienda.message as string}</p>
-        )}
-      </div>
+        {/* Ciudad */}
+        <div className="flex flex-col">
+          <label htmlFor="ciudadVivienda" className="font-medium text-gray-700">
+            Ciudad
+          </label>
+          <input
+            id="ciudadVivienda"
+            {...register("ciudadVivienda")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.ciudadVivienda && (
+            <p className="text-sm text-red-500">{errors.ciudadVivienda.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="telefonoFijo" className="text-sm font-medium text-gray-700">
-          Teléfono Fijo (opcional)
-        </label>
-        <input
-          id="telefonoFijo"
-          {...register("telefonoFijo")}
-          className="input input-bordered w-full"
-        />
-        {errors.telefonoFijo && (
-          <p className="text-red-500 text-xs">{errors.telefonoFijo.message as string}</p>
-        )}
-      </div>
+        {/* Teléfono Fijo */}
+        <div className="flex flex-col">
+          <label htmlFor="telefonoFijo" className="font-medium text-gray-700">
+            Teléfono Fijo
+          </label>
+          <input
+            id="telefonoFijo"
+            {...register("telefonoFijo")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.telefonoFijo && (
+            <p className="text-sm text-red-500">{errors.telefonoFijo.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="celular" className="text-sm font-medium text-gray-700">
-          Celular
-        </label>
-        <input
-          id="celular"
-          {...register("celular")}
-          className="input input-bordered w-full"
-        />
-        {errors.celular && (
-          <p className="text-red-500 text-xs">{errors.celular.message as string}</p>
-        )}
+        {/* Celular */}
+        <div className="flex flex-col">
+          <label htmlFor="celular" className="font-medium text-gray-700">
+            Celular
+          </label>
+          <input
+            id="celular"
+            {...register("celular")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.celular && (
+            <p className="text-sm text-red-500">{errors.celular.message}</p>
+          )}
+        </div>
       </div>
     </div>
   );
-};
-
-export default ViviendaSection;
+}

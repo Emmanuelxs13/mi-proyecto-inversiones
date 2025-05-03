@@ -1,79 +1,115 @@
 import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
 
 interface Props {
-  register: UseFormRegister<any>;
-  errors: Record<string, any>;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors<FieldValues>;
 }
 
-/**
- * Sección del formulario: Datos Personales
- * Esta sección incluye campos básicos como apellidos, nombres, documento y correo.
- */
-const DatosPersonalesSection: React.FC<Props> = ({ register, errors }) => {
+export default function DatosPersonalesSection({ register, errors }: Props) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="primerApellido" className="text-sm font-medium text-gray-700">
-          Primer Apellido
-        </label>
-        <input
-          id="primerApellido"
-          {...register("primerApellido")}
-          className="input input-bordered w-full"
-        />
-        {errors.primerApellido && <p className="text-red-500 text-xs">{errors.primerApellido.message}</p>}
-      </div>
+    <div className="space-y-6">
+      <h3 className="text-xl font-semibold text-blue-800 border-b pb-2">
+        Información Básica
+      </h3>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="segundoApellido" className="text-sm font-medium text-gray-700">
-          Segundo Apellido
-        </label>
-        <input
-          id="segundoApellido"
-          {...register("segundoApellido")}
-          className="input input-bordered w-full"
-        />
-        {errors.segundoApellido && <p className="text-red-500 text-xs">{errors.segundoApellido.message}</p>}
-      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        {/* Primer Apellido */}
+        <div className="flex flex-col">
+          <label htmlFor="primerApellido" className="font-medium text-gray-700">
+            Primer Apellido
+          </label>
+          <input
+            id="primerApellido"
+            {...register("primerApellido")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.primerApellido && (
+            <p className="text-sm text-red-500">{errors.primerApellido.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="nombres" className="text-sm font-medium text-gray-700">
-          Nombres Completos
-        </label>
-        <input
-          id="nombres"
-          {...register("nombres")}
-          className="input input-bordered w-full"
-        />
-        {errors.nombres && <p className="text-red-500 text-xs">{errors.nombres.message}</p>}
-      </div>
+        {/* Segundo Apellido */}
+        <div className="flex flex-col">
+          <label htmlFor="segundoApellido" className="font-medium text-gray-700">
+            Segundo Apellido
+          </label>
+          <input
+            id="segundoApellido"
+            {...register("segundoApellido")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.segundoApellido && (
+            <p className="text-sm text-red-500">{errors.segundoApellido.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="numeroDocumento" className="text-sm font-medium text-gray-700">
-          Número de Documento
-        </label>
-        <input
-          id="numeroDocumento"
-          {...register("numeroDocumento")}
-          className="input input-bordered w-full"
-        />
-        {errors.numeroDocumento && <p className="text-red-500 text-xs">{errors.numeroDocumento.message}</p>}
-      </div>
+        {/* Nombres */}
+        <div className="flex flex-col">
+          <label htmlFor="nombres" className="font-medium text-gray-700">
+            Nombres
+          </label>
+          <input
+            id="nombres"
+            {...register("nombres")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.nombres && (
+            <p className="text-sm text-red-500">{errors.nombres.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1 md:col-span-2">
-        <label htmlFor="correo" className="text-sm font-medium text-gray-700">
-          Correo Electrónico
-        </label>
-        <input
-          id="correo"
-          {...register("correo")}
-          className="input input-bordered w-full"
-        />
-        {errors.correo && <p className="text-red-500 text-xs">{errors.correo.message}</p>}
+        {/* Tipo de Documento */}
+        <div className="flex flex-col">
+          <label htmlFor="tipoDocumento" className="font-medium text-gray-700">
+            Tipo de Documento
+          </label>
+          <select
+            id="tipoDocumento"
+            {...register("tipoDocumento")}
+            className="border-b border-gray-300 bg-transparent focus:outline-none focus:border-blue-500 transition-colors py-1"
+          >
+            <option value="">Selecciona un tipo</option>
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="TI">Tarjeta de Identidad</option>
+            <option value="CE">Cédula de Extranjería</option>
+          </select>
+          {errors.tipoDocumento && (
+            <p className="text-sm text-red-500">{errors.tipoDocumento.message}</p>
+          )}
+        </div>
+
+        {/* Número de Documento */}
+        <div className="flex flex-col">
+          <label htmlFor="numeroDocumento" className="font-medium text-gray-700">
+            Número de Documento
+          </label>
+          <input
+            id="numeroDocumento"
+            {...register("numeroDocumento")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.numeroDocumento && (
+            <p className="text-sm text-red-500">{errors.numeroDocumento.message}</p>
+          )}
+        </div>
+
+        {/* Correo Electrónico */}
+        <div className="flex flex-col">
+          <label htmlFor="correo" className="font-medium text-gray-700">
+            Correo Electrónico
+          </label>
+          <input
+            id="correo"
+            type="email"
+            {...register("correo")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.correo && (
+            <p className="text-sm text-red-500">{errors.correo.message}</p>
+          )}
+        </div>
       </div>
     </div>
   );
-};
-
-export default DatosPersonalesSection;
+}

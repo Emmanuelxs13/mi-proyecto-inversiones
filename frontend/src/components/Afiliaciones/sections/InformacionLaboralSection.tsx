@@ -1,107 +1,98 @@
-import { FC } from "react";
+import React from "react";
 import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
 
-/**
- * Sección de Información Laboral para el formulario de afiliación.
- * Incluye datos como sede, dirección, teléfono, EPS, fondo y sueldo.
- */
-const InformacionLaboralSection: FC<{
+interface Props {
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
-}> = ({ register, errors }) => {
+}
+
+export default function InformacionLaboralSection({ register, errors }: Props) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <h3 className="text-2xl font-semibold text-gray-700 col-span-2 border-b pb-2">
+    <div className="space-y-6">
+      <h3 className="text-xl font-semibold text-blue-800 border-b pb-2">
         Información Laboral
       </h3>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="sede" className="text-sm font-medium text-gray-700">
-          Sede / ERON / Regional o EPN
-        </label>
-        <input
-          id="sede"
-          {...register("sede")}
-          className="input input-bordered w-full"
-        />
-        {errors.sede && <p className="text-red-500 text-xs">{errors.sede.message as string}</p>}
-      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        {/* Sede */}
+        <div className="flex flex-col">
+          <label htmlFor="sede" className="font-medium text-gray-700">Sede / ERON / EPN</label>
+          <input
+            id="sede"
+            {...register("sede")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.sede && (
+            <p className="text-sm text-red-500">{errors.sede.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="direccionLaboral" className="text-sm font-medium text-gray-700">
-          Dirección Laboral
-        </label>
-        <input
-          id="direccionLaboral"
-          {...register("direccionLaboral")}
-          className="input input-bordered w-full"
-        />
-        {errors.direccionLaboral && <p className="text-red-500 text-xs">{errors.direccionLaboral.message as string}</p>}
-      </div>
+        {/* Dirección Laboral */}
+        <div className="flex flex-col">
+          <label htmlFor="direccionLaboral" className="font-medium text-gray-700">Dirección Laboral</label>
+          <input
+            id="direccionLaboral"
+            {...register("direccionLaboral")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.direccionLaboral && (
+            <p className="text-sm text-red-500">{errors.direccionLaboral.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="telefonoLaboral" className="text-sm font-medium text-gray-700">
-          Teléfono Laboral
-        </label>
-        <input
-          id="telefonoLaboral"
-          {...register("telefonoLaboral")}
-          className="input input-bordered w-full"
-        />
-        {errors.telefonoLaboral && <p className="text-red-500 text-xs">{errors.telefonoLaboral.message as string}</p>}
-      </div>
+        {/* Teléfono Laboral */}
+        <div className="flex flex-col">
+          <label htmlFor="telefonoLaboral" className="font-medium text-gray-700">Teléfono Laboral</label>
+          <input
+            id="telefonoLaboral"
+            {...register("telefonoLaboral")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.telefonoLaboral && (
+            <p className="text-sm text-red-500">{errors.telefonoLaboral.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="sueldoMensual" className="text-sm font-medium text-gray-700">
-          Sueldo Mensual
-        </label>
-        <input
-          id="sueldoMensual"
-          type="number"
-          {...register("sueldoMensual")}
-          className="input input-bordered w-full"
-        />
-        {errors.sueldoMensual && <p className="text-red-500 text-xs">{errors.sueldoMensual.message as string}</p>}
-      </div>
+        {/* Sueldo Mensual */}
+        <div className="flex flex-col">
+          <label htmlFor="sueldoMensual" className="font-medium text-gray-700">Sueldo Mensual</label>
+          <input
+            id="sueldoMensual"
+            type="number"
+            {...register("sueldoMensual")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.sueldoMensual && (
+            <p className="text-sm text-red-500">{errors.sueldoMensual.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="eps" className="text-sm font-medium text-gray-700">
-          EPS
-        </label>
-        <input
-          id="eps"
-          {...register("eps")}
-          className="input input-bordered w-full"
-        />
-        {errors.eps && <p className="text-red-500 text-xs">{errors.eps.message as string}</p>}
-      </div>
+        {/* EPS */}
+        <div className="flex flex-col">
+          <label htmlFor="eps" className="font-medium text-gray-700">EPS</label>
+          <input
+            id="eps"
+            {...register("eps")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.eps && (
+            <p className="text-sm text-red-500">{errors.eps.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="fondoPension" className="text-sm font-medium text-gray-700">
-          Fondo de Pensiones
-        </label>
-        <input
-          id="fondoPension"
-          {...register("fondoPension")}
-          className="input input-bordered w-full"
-        />
-        {errors.fondoPension && <p className="text-red-500 text-xs">{errors.fondoPension.message as string}</p>}
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label htmlFor="porcentajeDescuento" className="text-sm font-medium text-gray-700">
-          Porcentaje de Descuento Autorizado (%)
-        </label>
-        <input
-          id="porcentajeDescuento"
-          type="number"
-          {...register("porcentajeDescuento")}
-          className="input input-bordered w-full"
-        />
-        {errors.porcentajeDescuento && <p className="text-red-500 text-xs">{errors.porcentajeDescuento.message as string}</p>}
+        {/* Fondo de Pensiones */}
+        <div className="flex flex-col">
+          <label htmlFor="fondoPension" className="font-medium text-gray-700">Fondo de Pensiones</label>
+          <input
+            id="fondoPension"
+            {...register("fondoPension")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.fondoPension && (
+            <p className="text-sm text-red-500">{errors.fondoPension.message}</p>
+          )}
+        </div>
       </div>
     </div>
   );
-};
-
-export default InformacionLaboralSection;
+}

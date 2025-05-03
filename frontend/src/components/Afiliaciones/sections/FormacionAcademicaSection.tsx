@@ -1,54 +1,56 @@
 import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
 
 interface Props {
-  register: UseFormRegister<any>;
-  errors: Record<string, any>;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors<FieldValues>;
 }
 
-/**
- * Sección del formulario: Formación Académica
- * Incluye nivel de estudios y título obtenido.
- */
-const FormacionAcademicaSection: React.FC<Props> = ({ register, errors }) => {
+export default function FormacionAcademicaSection({ register, errors }: Props) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="nivelEstudios" className="text-sm font-medium text-gray-700">
-          Nivel de Estudios
-        </label>
-        <select
-          id="nivelEstudios"
-          {...register("nivelEstudios")}
-          className="select select-bordered w-full"
-        >
-          <option value="">Seleccionar nivel de estudios</option>
-          <option value="Primaria">Primaria</option>
-          <option value="Bachillerato">Bachillerato</option>
-          <option value="Técnico">Técnico</option>
-          <option value="Universitario">Universitario</option>
-          <option value="Otro">Otro</option>
-        </select>
-        {errors.nivelEstudios && (
-          <p className="text-red-500 text-xs">{errors.nivelEstudios.message}</p>
-        )}
-      </div>
+    <div className="space-y-6">
+      <h3 className="text-xl font-semibold text-blue-800 border-b pb-2">
+        Formación Académica
+      </h3>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="tituloObtenido" className="text-sm font-medium text-gray-700">
-          Título Obtenido
-        </label>
-        <input
-          id="tituloObtenido"
-          {...register("tituloObtenido")}
-          className="input input-bordered w-full"
-        />
-        {errors.tituloObtenido && (
-          <p className="text-red-500 text-xs">{errors.tituloObtenido.message}</p>
-        )}
+      <div className="grid md:grid-cols-2 gap-4">
+        {/* Nivel de Estudios */}
+        <div className="flex flex-col">
+          <label htmlFor="nivelEstudios" className="font-medium text-gray-700">
+            Nivel de Estudios
+          </label>
+          <select
+            id="nivelEstudios"
+            {...register("nivelEstudios")}
+            className="border-b border-gray-300 bg-transparent focus:outline-none focus:border-blue-500 transition-colors py-1"
+          >
+            <option value="">Selecciona un nivel</option>
+            <option value="Primaria">Primaria</option>
+            <option value="Bachillerato">Bachillerato</option>
+            <option value="Técnico">Técnico</option>
+            <option value="Universitario">Universitario</option>
+            <option value="Otro">Otro</option>
+          </select>
+          {errors.nivelEstudios && (
+            <p className="text-sm text-red-500">{errors.nivelEstudios.message}</p>
+          )}
+        </div>
+
+        {/* Título Obtenido */}
+        <div className="flex flex-col">
+          <label htmlFor="tituloObtenido" className="font-medium text-gray-700">
+            Título Obtenido
+          </label>
+          <input
+            id="tituloObtenido"
+            {...register("tituloObtenido")}
+            className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+          />
+          {errors.tituloObtenido && (
+            <p className="text-sm text-red-500">{errors.tituloObtenido.message}</p>
+          )}
+        </div>
       </div>
     </div>
   );
-};
-
-export default FormacionAcademicaSection;
+}
