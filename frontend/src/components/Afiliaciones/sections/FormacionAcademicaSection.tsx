@@ -1,11 +1,25 @@
 import React from "react";
-import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
-interface Props {
-  register: UseFormRegister<FieldValues>;
-  errors: FieldErrors<FieldValues>;
+/**
+ * Campos esperados en la sección de Formación Académica.
+ */
+interface FormacionAcademicaFields {
+  nivelEstudios: string;
+  tituloObtenido: string;
 }
 
+/**
+ * Props del componente: recibe funciones de registro y errores de validación.
+ */
+interface Props {
+  register: UseFormRegister<FormacionAcademicaFields>;
+  errors: FieldErrors<FormacionAcademicaFields>;
+}
+
+/**
+ * Componente para la sección de formación académica del formulario.
+ */
 export default function FormacionAcademicaSection({ register, errors }: Props) {
   return (
     <div className="space-y-6">
@@ -31,7 +45,7 @@ export default function FormacionAcademicaSection({ register, errors }: Props) {
             <option value="Universitario">Universitario</option>
             <option value="Otro">Otro</option>
           </select>
-          {errors.nivelEstudios && (
+          {typeof errors.nivelEstudios?.message === "string" && (
             <p className="text-sm text-red-500">{errors.nivelEstudios.message}</p>
           )}
         </div>
@@ -46,7 +60,7 @@ export default function FormacionAcademicaSection({ register, errors }: Props) {
             {...register("tituloObtenido")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.tituloObtenido && (
+          {typeof errors.tituloObtenido?.message === "string" && (
             <p className="text-sm text-red-500">{errors.tituloObtenido.message}</p>
           )}
         </div>

@@ -29,7 +29,7 @@ export default function ViviendaSection({ register, errors }: Props) {
             <option value="Familiar">Familiar</option>
             <option value="Arriendo">Arriendo</option>
           </select>
-          {errors.tipoVivienda && (
+          {typeof errors.tipoVivienda?.message === "string" && (
             <p className="text-sm text-red-500">{errors.tipoVivienda.message}</p>
           )}
         </div>
@@ -44,7 +44,7 @@ export default function ViviendaSection({ register, errors }: Props) {
             {...register("direccionVivienda")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.direccionVivienda && (
+          {typeof errors.direccionVivienda?.message === "string" && (
             <p className="text-sm text-red-500">{errors.direccionVivienda.message}</p>
           )}
         </div>
@@ -59,7 +59,7 @@ export default function ViviendaSection({ register, errors }: Props) {
             {...register("ciudadVivienda")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.ciudadVivienda && (
+          {typeof errors.ciudadVivienda?.message === "string" && (
             <p className="text-sm text-red-500">{errors.ciudadVivienda.message}</p>
           )}
         </div>
@@ -74,7 +74,7 @@ export default function ViviendaSection({ register, errors }: Props) {
             {...register("telefonoFijo")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.telefonoFijo && (
+          {typeof errors.telefonoFijo?.message === "string" && (
             <p className="text-sm text-red-500">{errors.telefonoFijo.message}</p>
           )}
         </div>
@@ -89,7 +89,7 @@ export default function ViviendaSection({ register, errors }: Props) {
             {...register("celular")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.celular && (
+          {typeof errors.celular?.message === "string" && (
             <p className="text-sm text-red-500">{errors.celular.message}</p>
           )}
         </div>

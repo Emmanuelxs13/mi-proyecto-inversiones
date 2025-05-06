@@ -35,7 +35,7 @@ const AutorizacionDescuentoSection: FC<{
           className="input input-bordered w-full"
           placeholder="Ej: 5"
         />
-        {errors.porcentajeDescuento && (
+        {typeof errors.porcentajeDescuento?.message === "string" && (
           <p className="text-red-500 text-xs">{errors.porcentajeDescuento.message}</p>
         )}
       </div>
@@ -51,7 +51,7 @@ const AutorizacionDescuentoSection: FC<{
           Confirmo que autorizo este descuento de forma voluntaria.
         </label>
       </div>
-      {errors.aceptaAutorizacion && (
+      {typeof errors.aceptaAutorizacion?.message === "string" && (
         <p className="text-red-500 text-xs">{errors.aceptaAutorizacion.message}</p>
       )}
     </div>
