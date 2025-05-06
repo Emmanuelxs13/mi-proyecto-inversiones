@@ -24,14 +24,19 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
             {...register("primerApellido")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.primerApellido && (
-            <p className="text-sm text-red-500">{errors.primerApellido.message}</p>
+          {typeof errors.primerApellido?.message === "string" && (
+            <p className="text-sm text-red-500">
+              {errors.primerApellido.message}
+            </p>
           )}
         </div>
 
         {/* Segundo Apellido */}
         <div className="flex flex-col">
-          <label htmlFor="segundoApellido" className="font-medium text-gray-700">
+          <label
+            htmlFor="segundoApellido"
+            className="font-medium text-gray-700"
+          >
             Segundo Apellido
           </label>
           <input
@@ -39,8 +44,10 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
             {...register("segundoApellido")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.segundoApellido && (
-            <p className="text-sm text-red-500">{errors.segundoApellido.message}</p>
+          {typeof errors.segundoApellido?.message === "string" && (
+            <p className="text-sm text-red-500">
+              {errors.segundoApellido.message}
+            </p>
           )}
         </div>
 
@@ -54,7 +61,7 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
             {...register("nombres")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.nombres && (
+          {typeof errors.nombres?.message === "string" && (
             <p className="text-sm text-red-500">{errors.nombres.message}</p>
           )}
         </div>
@@ -74,14 +81,19 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
             <option value="TI">Tarjeta de Identidad</option>
             <option value="CE">Cédula de Extranjería</option>
           </select>
-          {errors.tipoDocumento && (
-            <p className="text-sm text-red-500">{errors.tipoDocumento.message}</p>
+          {typeof errors.tipoDocumento?.message === "string" && (
+            <p className="text-sm text-red-500">
+              {errors.tipoDocumento.message}
+            </p>
           )}
         </div>
 
         {/* Número de Documento */}
         <div className="flex flex-col">
-          <label htmlFor="numeroDocumento" className="font-medium text-gray-700">
+          <label
+            htmlFor="numeroDocumento"
+            className="font-medium text-gray-700"
+          >
             Número de Documento
           </label>
           <input
@@ -89,8 +101,10 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
             {...register("numeroDocumento")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.numeroDocumento && (
-            <p className="text-sm text-red-500">{errors.numeroDocumento.message}</p>
+          {typeof errors.numeroDocumento?.message === "string" && (
+            <p className="text-sm text-red-500">
+              {errors.numeroDocumento.message}
+            </p>
           )}
         </div>
 
@@ -105,7 +119,7 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
             {...register("correo")}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
-          {errors.correo && (
+          {typeof errors.correo?.message === "string" && (
             <p className="text-sm text-red-500">{errors.correo.message}</p>
           )}
         </div>

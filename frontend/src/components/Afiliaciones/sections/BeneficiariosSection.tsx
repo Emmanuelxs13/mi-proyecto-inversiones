@@ -1,10 +1,11 @@
 import React from "react";
-import { useFieldArray, FieldValues, UseFormRegister, FieldErrors, Control } from "react-hook-form";
+import { useFieldArray, UseFormRegister, FieldErrors, Control } from "react-hook-form";
+import { AfiliacionForm } from "../AfiliacionForm"; // Asegúrate de importar la interfaz correcta
 
 interface Props {
-  register: UseFormRegister<FieldValues>;
-  errors: FieldErrors<FieldValues>;
-  control: Control<FieldValues>;
+  register: UseFormRegister<AfiliacionForm>;
+  errors: FieldErrors<AfiliacionForm>;
+  control: Control<AfiliacionForm>;
 }
 
 export default function BeneficiariosSection({ register, errors, control }: Props) {
@@ -24,7 +25,7 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
           key={field.id}
           className="grid md:grid-cols-2 gap-4 border-b border-gray-200 pb-4 mb-4"
         >
-          {/* Nombres */}
+          {/* Nombre */}
           <div className="flex flex-col">
             <label className="text-gray-700 font-medium">Nombre</label>
             <input
@@ -34,7 +35,7 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
             />
             {errors?.beneficiarios?.[index]?.nombre && (
               <p className="text-sm text-red-500">
-                {errors.beneficiarios[index]?.nombre?.message as string}
+                {errors.beneficiarios[index]?.nombre?.message}
               </p>
             )}
           </div>
@@ -49,7 +50,7 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
             />
             {errors?.beneficiarios?.[index]?.documento && (
               <p className="text-sm text-red-500">
-                {errors.beneficiarios[index]?.documento?.message as string}
+                {errors.beneficiarios[index]?.documento?.message}
               </p>
             )}
           </div>
@@ -64,7 +65,7 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
             />
             {errors?.beneficiarios?.[index]?.parentesco && (
               <p className="text-sm text-red-500">
-                {errors.beneficiarios[index]?.parentesco?.message as string}
+                {errors.beneficiarios[index]?.parentesco?.message}
               </p>
             )}
           </div>
@@ -79,7 +80,7 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
             />
             {errors?.beneficiarios?.[index]?.fechaNacimiento && (
               <p className="text-sm text-red-500">
-                {errors.beneficiarios[index]?.fechaNacimiento?.message as string}
+                {errors.beneficiarios[index]?.fechaNacimiento?.message}
               </p>
             )}
           </div>
@@ -89,18 +90,18 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
             <label className="text-gray-700 font-medium">% Asignado</label>
             <input
               type="number"
-              {...register(`beneficiarios.${index}.porcentaje`)}
+              {...register(`beneficiarios.${index}.porcentaje`, { valueAsNumber: true })}
               className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
               placeholder="Ej: 25"
             />
             {errors?.beneficiarios?.[index]?.porcentaje && (
               <p className="text-sm text-red-500">
-                {errors.beneficiarios[index]?.porcentaje?.message as string}
+                {errors.beneficiarios[index]?.porcentaje?.message}
               </p>
             )}
           </div>
 
-          {/* Eliminar beneficiario */}
+          {/* Botón eliminar */}
           <div className="md:col-span-2 flex justify-end items-end">
             <button
               type="button"
@@ -123,7 +124,7 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
               documento: "",
               parentesco: "",
               fechaNacimiento: "",
-              porcentaje: "",
+              porcentaje: 0,
             })
           }
           className="text-blue-600 hover:underline text-sm font-medium"
@@ -134,5 +135,3 @@ export default function BeneficiariosSection({ register, errors, control }: Prop
     </div>
   );
 }
- 
-

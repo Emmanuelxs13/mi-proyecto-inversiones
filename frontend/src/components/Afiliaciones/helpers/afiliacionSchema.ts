@@ -1,8 +1,8 @@
 import * as yup from "yup";
 
 /**
- * Validaciones paso a paso para el formulario de afiliación.
- * Separado en secciones para usar con formularios tipo wizard.
+ * Esquema de validación completo para el formulario de afiliación.
+ * Organizado por pasos y con mensajes personalizados.
  */
 
 // Paso 1: Datos personales
@@ -29,7 +29,19 @@ export const esquemaVivienda = yup.object({
   tipoVivienda: yup.string().required("Tipo de vivienda obligatorio"),
   direccionVivienda: yup.string().required("Dirección obligatoria"),
   ciudadVivienda: yup.string().required("Ciudad obligatoria"),
-  telefonoFijo: yup.string().matches(/^\d+$/, "Solo números permitidos"),
+  telefonoFijo: yup
+  .string()
+  .nullable()
+  .notRequired()
+  .matches(/^\d+$/, "Solo números permitidos")
+  .test(
+    "longitud-minima",
+    "Debe tener al menos 7 dígitos",
+    function (value) {
+      if (!value) return true; // Si está vacío, está bien (no es requerido)
+      return value.length >= 7;
+    }
+  ),
   celular: yup
     .string()
     .matches(/^\d+$/, "Solo números permitidos")
@@ -40,7 +52,11 @@ export const esquemaVivienda = yup.object({
 export const esquemaLaboral = yup.object({
   sede: yup.string().required("Sede obligatoria"),
   direccionLaboral: yup.string().required("Dirección laboral obligatoria"),
-  telefonoLaboral: yup.string().matches(/^\d+$/, "Solo números permitidos"),
+  telefonoLaboral: yup
+    .string()
+    .nullable()
+    .notRequired()
+    .matches(/^\d+$/, "Solo números permitidos"),
   sueldoMensual: yup
     .number()
     .typeError("Debe ser un número")
@@ -68,7 +84,10 @@ export const esquemaBeneficiarios = yup.object({
           .matches(/^\d+$/, "Solo números permitidos")
           .required("Documento requerido"),
         parentesco: yup.string().required("Parentesco requerido"),
-        fechaNacimiento: yup.date().max(new Date(), "Fecha inválida"),
+        fechaNacimiento: yup
+          .date()
+          .typeError("Fecha inválida")
+          .max(new Date(), "No puede ser una fecha futura"),
         porcentaje: yup
           .number()
           .typeError("Debe ser un número")

@@ -16,7 +16,6 @@ import BeneficiariosSection from "./sections/BeneficiariosSection";
 import FirmaYCedulaSection from "./sections/FirmaYCedulaSection";
 import AutorizacionDescuentoSection from "./sections/AutorizacionDescuentoSection";
 
-// Define la estructura de cada paso del formulario
 interface Paso {
   id: number;
   nombre: string;
@@ -43,7 +42,7 @@ const esquemas: yup.AnySchema[] = [
   esquemaVivienda,
   esquemaLaboral,
   esquemaBeneficiarios,
-  yup.object(),
+  yup.object(), // Firma y Cédula (validación personalizada, si se desea)
   yup.object({
     porcentajeDescuento: yup
       .number()
@@ -74,16 +73,6 @@ export default function AfiliacionForm() {
     formState: { errors },
   } = useForm<FieldValues>({
     mode: "onTouched",
-    defaultValues: {
-      primerApellido: "",
-      segundoApellido: "",
-      nombres: "",
-      tipoDocumento: "",
-      numeroDocumento: "",
-      correo: "",
-      nivelEstudios: "",
-      tituloObtenido: "",
-    },
   });
 
   const validarPasoActual = async (): Promise<boolean> => {
@@ -98,8 +87,29 @@ export default function AfiliacionForm() {
     return esValido;
   };
 
+  const enviarFormularioCompleto = async (datos: FieldValues) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/afiliaciones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+
+      const resultado = await response.json();
+
+      if (!response.ok) {
+        throw new Error(resultado.message || "Error al enviar el formulario");
+      }
+
+      alert("¡Afiliación enviada con éxito!");
+      console.log("Respuesta del servidor:", resultado);
+    } catch (error: any) {
+      console.error("Error al enviar el formulario:", error.message);
+      alert("Hubo un error al enviar la afiliación. Intenta nuevamente.");
+    }
+  };
+
   const onSubmit = async () => {
-    console.log("CLICK DETECTADO");
     const esValido = await validarPasoActual();
     if (!esValido) return;
 
@@ -109,8 +119,7 @@ export default function AfiliacionForm() {
     if (pasoActual < pasos.length - 1) {
       setPasoActual((prev) => prev + 1);
     } else {
-      console.log("Formulario completo:", nuevosDatos);
-      // Aquí podrías hacer un fetch o axios.post
+      await enviarFormularioCompleto(nuevosDatos);
     }
   };
 
@@ -123,10 +132,8 @@ export default function AfiliacionForm() {
         Paso {pasoActual + 1} de {pasos.length}: {pasos[pasoActual].nombre}
       </h2>
 
-      {/* Renderiza el componente correspondiente al paso actual */}
       <PasoActualComponent register={register} errors={errors} control={control} />
 
-      {/* Navegación entre pasos */}
       <div className="flex justify-between mt-10">
         {pasoActual > 0 && (
           <button
