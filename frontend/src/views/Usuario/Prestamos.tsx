@@ -3,9 +3,9 @@ import { format } from "date-fns";
 import {
   exportPrestamosToCSV,
   exportPrestamosToPDF,
-} from "../utils/ExportPrestamosUtils";
-import { PrestamoVista } from "../types/PrestamoVista";
-import FormularioPrestamoModal from "../components/FormularioPrestamoModal";
+} from "../../utils/ExportPrestamosUtils";
+import { PrestamoVista } from "../../types/PrestamoVista";
+import FormularioPrestamoModal from "../../components/FormularioPrestamoModal";
 
 // Estructura del préstamo
 interface Prestamo {

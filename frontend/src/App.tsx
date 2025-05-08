@@ -1,33 +1,54 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainLayout from "./layouts/MainLayout";
+// src/App.tsx
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-// Páginas principales
-import Dashboard from "./components/Dashboard";
-import Socios from "./pages/Socios";
-import Solicitudes from "./pages/Solicitudes";
-import Contacto from "./components/Contact";
-import Simulator from "./pages/Simulator"; // O como lo tengas nombrado
-import HistorialSimulaciones from "./pages/HistorialSimulaciones";
-import Estadisticas from "./pages/Estadisticas";
-import Prestamos from "./pages/Prestamos";
-import AfiliacionForm from "./components/Afiliaciones/AfiliacionForm";
+// Layouts
+import AdminLayout from "./layouts/AdminLayout"; // Layout para el administrador
+
+// Login
+import Login from "./views/login/Login";
+
+// Vistas del admin
+import Dashboard from "./views/Admin/Dashboard";
+import Socios from "./views/Admin/Socios";
+import Solicitudes from "./views/Admin/Solicitudes";
+// import Contacto from "./views/Usuario/Contact"; // Cambiado a Usuario/Contacto para mantener la estructura
+import Simulador from "./views/Admin/Simulator";
+import HistorialSimulaciones from "./views/Admin/HistorialSimulaciones";
+import Estadisticas from "./views/Admin/Estadisticas";
+// import Prestamos from "./views/Usuario/Prestamos"; //El usuario debe llenar un formulario similar al de afiliación para solicitar un prestamo
+// import Afiliaciones from "./views/Usuario/Afiliaciones";
+
+// (Opcional para usuarios normales en el futuro)
+// import UsuarioInicio from "./views/Usuario/Inicio";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Todas las rutas protegidas por el layout con Sidebar */}
-        <Route path="/" element={<MainLayout />}>
+        {/* Página pública */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Redirección base */}
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+
+        {/* Rutas protegidas por el layout del administrador */}
+        <Route path="/" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="socios" element={<Socios />} />
           <Route path="solicitudes" element={<Solicitudes />} />
-          <Route path="contacto" element={<Contacto />} />
-          <Route path="simulador" element={<Simulator />} />
+          {/* <Route path="contacto" element={<Contacto />} /> */}
+          <Route path="simulador" element={<Simulador />} />
           <Route path="historial" element={<HistorialSimulaciones />} />
           <Route path="estadisticas" element={<Estadisticas />} />
-          <Route path="prestamos" element={<Prestamos />} />
-          <Route path="afiliaciones" element={<AfiliacionForm />} />
+          {/* <Route path="prestamos" element={<Prestamos />} /> */}
+          {/* <Route path="afiliaciones" element={<Afiliaciones />} /> */}
         </Route>
+
+        {/* Rutas para usuario normal - más adelante
+        <Route path="/usuario" element={<UserLayout />}>
+          <Route path="inicio" element={<UsuarioInicio />} />
+        </Route>
+        */}
       </Routes>
     </Router>
   );

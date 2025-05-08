@@ -1,8 +1,8 @@
 // Página de historial de simulaciones con exportación a PDF y CSV
 
 import React, { useState } from "react";
-import { exportHistorialToPDF, exportHistorialToCSV } from "../utils/ExportUtils";
-import { Simulacion } from "../types/Simulacion";
+import { exportHistorialToPDF, exportHistorialToCSV } from "../../utils/ExportUtils";
+import { Simulacion } from "../../types/Simulacion";
 
 const formatoPesos = new Intl.NumberFormat("es-CO", {
   style: "currency",

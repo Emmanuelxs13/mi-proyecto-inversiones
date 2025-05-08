@@ -2,8 +2,8 @@
 // Página de gestión de socios con datos obtenidos desde una API pública con opción de definir la cantidad de registros, paginación y búsqueda por nombre en el frontend
 
 import React, { useEffect, useState } from "react";
-import SociosTable from "../components/SociosTable";
-import { Socio } from "../types/Socio";
+import SociosTable from "../Admin/SociosTable";
+import { Socio } from "../../types/Socio";
 
 const Socios = () => {
   const [socios, setSocios] = useState<Socio[]>([]); // Lista completa de socios
