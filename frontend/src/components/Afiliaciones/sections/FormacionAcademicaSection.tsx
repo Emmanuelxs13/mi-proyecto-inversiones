@@ -19,6 +19,7 @@ interface Props {
 
 /**
  * Componente para la sección de formación académica del formulario.
+ * Aplica validaciones obligatorias para los campos requeridos.
  */
 export default function FormacionAcademicaSection({ register, errors }: Props) {
   return (
@@ -35,7 +36,7 @@ export default function FormacionAcademicaSection({ register, errors }: Props) {
           </label>
           <select
             id="nivelEstudios"
-            {...register("nivelEstudios")}
+            {...register("nivelEstudios", { required: "El nivel de estudios es obligatorio" })}
             className="border-b border-gray-300 bg-transparent focus:outline-none focus:border-blue-500 transition-colors py-1"
           >
             <option value="">Selecciona un nivel</option>
@@ -57,7 +58,7 @@ export default function FormacionAcademicaSection({ register, errors }: Props) {
           </label>
           <input
             id="tituloObtenido"
-            {...register("tituloObtenido")}
+            {...register("tituloObtenido", { required: "El título es obligatorio" })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.tituloObtenido?.message === "string" && (

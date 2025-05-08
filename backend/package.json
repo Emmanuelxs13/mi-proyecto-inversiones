@@ -17,6 +17,7 @@
     "multer": "^1.4.5-lts.2",
     "nodemailer": "^6.10.1",
     "pg": "^8.15.6",
+    "react-number-format": "^5.4.4",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
@@ -43,7 +44,11 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules"],
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "description": ""
 }
