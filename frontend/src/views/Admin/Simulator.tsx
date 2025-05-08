@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { exportToPDF, exportToCSV } from "../utils/ExportUtils";
+import { exportToPDF, exportToCSV } from "../../utils/ExportUtils";
 
 const Simulator = () => {
   const [capital, setCapital] = useState<number>(0);

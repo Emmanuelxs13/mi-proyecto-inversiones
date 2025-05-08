@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import {
   BarChart,
   Bar,
@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { exportChartToPDF, exportChartToCSV } from "../utils/ExportEstadisticasUtils";
+import { exportChartToPDF, exportChartToCSV } from "../../utils/ExportEstadisticasUtils";
 
 // Datos estáticos de ejemplo
 const estadisticas = [

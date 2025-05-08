@@ -1,6 +1,6 @@
 // src/pages/Contacto.tsx
 import React from "react";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 
 const Contacto = () => {
   return (

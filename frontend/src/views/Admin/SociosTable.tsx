@@ -2,7 +2,7 @@
 // Componente de tabla que muestra la lista de socios con acciones: Ver, Editar, Eliminar y Crear en modales personalizados sin librerías externas
 
 import React, { useState } from "react";
-import { Socio } from "../types/Socio";
+import { Socio } from "../../types/Socio";
 
 // Props que recibe el componente
 interface SociosTableProps {

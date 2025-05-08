@@ -15,7 +15,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import { exportDashboardToPDF, exportDashboardToCSV } from "../utils/ExportDashboardUtils";
+import { exportDashboardToPDF, exportDashboardToCSV } from "../../utils/ExportDashboardUtils";
 import { useNavigate } from "react-router-dom";
 
 // 🎨 Colores personalizados según tailwind.config.js

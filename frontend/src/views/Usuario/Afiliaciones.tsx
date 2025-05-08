@@ -1,5 +1,5 @@
 import React from "react";
-import AfiliacionForm from "../components/Afiliaciones/AfiliacionForm";
+import AfiliacionForm from "../../components/Afiliaciones/AfiliacionForm";
 
 /**
  * Página principal que muestra el formulario de afiliación paso a paso.
