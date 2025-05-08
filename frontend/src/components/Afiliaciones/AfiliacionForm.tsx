@@ -1,5 +1,6 @@
 import { useForm, FieldValues, UseFormRegister, FieldErrors, Control } from "react-hook-form";
 import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   esquemaDatosPersonales,
   esquemaFormacionAcademica,
@@ -42,7 +43,7 @@ const esquemas: yup.AnySchema[] = [
   esquemaVivienda,
   esquemaLaboral,
   esquemaBeneficiarios,
-  yup.object(), // Firma y Cédula (validación personalizada, si se desea)
+  yup.object(),
   yup.object({
     porcentajeDescuento: yup
       .number()
@@ -73,17 +74,14 @@ export default function AfiliacionForm() {
     formState: { errors },
   } = useForm<FieldValues>({
     mode: "onTouched",
+    resolver: yupResolver(esquemas[pasoActual]),
   });
 
   const validarPasoActual = async (): Promise<boolean> => {
-    const schema = esquemas[pasoActual];
-    const camposDelPaso = Object.keys(schema.fields ?? {});
-    const esValido = await trigger(camposDelPaso);
-
+    const esValido = await trigger();
     if (!esValido) {
       console.warn("Errores detectados, no se avanza.");
     }
-
     return esValido;
   };
 

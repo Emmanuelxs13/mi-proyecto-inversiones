@@ -1,8 +1,10 @@
 import React from "react";
 import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
 
+//Falta terminar la validación de este punto
+
 /**
- * Props que recibe el componente: funciones de registro y errores.
+ * Props que recibe el componente: funciones de registro, errores y setValue.
  */
 interface Props {
   register: UseFormRegister<FieldValues>;
@@ -11,6 +13,7 @@ interface Props {
 
 /**
  * Componente para la sección de Información Laboral del formulario.
+ * Aplica validaciones obligatorias en campos clave.
  */
 export default function InformacionLaboralSection({ register, errors }: Props) {
   return (
@@ -27,7 +30,7 @@ export default function InformacionLaboralSection({ register, errors }: Props) {
           </label>
           <input
             id="sede"
-            {...register("sede")}
+            {...register("sede", { required: "La sede es obligatoria" })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.sede?.message === "string" && (
@@ -37,31 +40,49 @@ export default function InformacionLaboralSection({ register, errors }: Props) {
 
         {/* Dirección Laboral */}
         <div className="flex flex-col">
-          <label htmlFor="direccionLaboral" className="font-medium text-gray-700">
+          <label
+            htmlFor="direccionLaboral"
+            className="font-medium text-gray-700"
+          >
             Dirección Laboral
           </label>
           <input
             id="direccionLaboral"
-            {...register("direccionLaboral")}
+            {...register("direccionLaboral", {
+              required: "La dirección laboral es obligatoria",
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.direccionLaboral?.message === "string" && (
-            <p className="text-sm text-red-500">{errors.direccionLaboral.message}</p>
+            <p className="text-sm text-red-500">
+              {errors.direccionLaboral.message}
+            </p>
           )}
         </div>
 
         {/* Teléfono Laboral */}
         <div className="flex flex-col">
-          <label htmlFor="telefonoLaboral" className="font-medium text-gray-700">
+          <label
+            htmlFor="telefonoLaboral"
+            className="font-medium text-gray-700"
+          >
             Teléfono Laboral
           </label>
           <input
             id="telefonoLaboral"
-            {...register("telefonoLaboral")}
+            {...register("telefonoLaboral", {
+              required: "El teléfono laboral es obligatorio",
+              pattern: {
+                value: /^\d+$/,
+                message: "Solo se permiten números",
+              },
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.telefonoLaboral?.message === "string" && (
-            <p className="text-sm text-red-500">{errors.telefonoLaboral.message}</p>
+            <p className="text-sm text-red-500">
+              {errors.telefonoLaboral.message}
+            </p>
           )}
         </div>
 
@@ -72,12 +93,17 @@ export default function InformacionLaboralSection({ register, errors }: Props) {
           </label>
           <input
             id="sueldoMensual"
-            type="number"
-            {...register("sueldoMensual")}
+            {...register("sueldoMensual", {
+              required: "El sueldo mensual es obligatorio",
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
+            placeholder="2000000"
+            inputMode="numeric"
           />
           {typeof errors.sueldoMensual?.message === "string" && (
-            <p className="text-sm text-red-500">{errors.sueldoMensual.message}</p>
+            <p className="text-sm text-red-500">
+              {errors.sueldoMensual.message}
+            </p>
           )}
         </div>
 
@@ -88,7 +114,7 @@ export default function InformacionLaboralSection({ register, errors }: Props) {
           </label>
           <input
             id="eps"
-            {...register("eps")}
+            {...register("eps", { required: "La EPS es obligatoria" })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.eps?.message === "string" && (
@@ -103,11 +129,15 @@ export default function InformacionLaboralSection({ register, errors }: Props) {
           </label>
           <input
             id="fondoPension"
-            {...register("fondoPension")}
+            {...register("fondoPension", {
+              required: "El fondo de pensión es obligatorio",
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.fondoPension?.message === "string" && (
-            <p className="text-sm text-red-500">{errors.fondoPension.message}</p>
+            <p className="text-sm text-red-500">
+              {errors.fondoPension.message}
+            </p>
           )}
         </div>
       </div>

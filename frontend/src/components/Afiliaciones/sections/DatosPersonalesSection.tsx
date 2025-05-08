@@ -21,7 +21,13 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
           </label>
           <input
             id="primerApellido"
-            {...register("primerApellido")}
+            {...register("primerApellido", {
+              required: "El primer apellido es obligatorio",
+              minLength: {
+                value: 2,
+                message: "Debe tener al menos 2 caracteres",
+              },
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.primerApellido?.message === "string" && (
@@ -41,7 +47,13 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
           </label>
           <input
             id="segundoApellido"
-            {...register("segundoApellido")}
+            {...register("segundoApellido", {
+              required: "El segundo apellido es obligatorio",
+              minLength: {
+                value: 2,
+                message: "Debe tener al menos 2 caracteres",
+              },
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.segundoApellido?.message === "string" && (
@@ -58,7 +70,13 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
           </label>
           <input
             id="nombres"
-            {...register("nombres")}
+            {...register("nombres", {
+              required: "El nombre es obligatorio",
+              minLength: {
+                value: 2,
+                message: "Debe tener al menos 2 caracteres",
+              },
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.nombres?.message === "string" && (
@@ -73,7 +91,9 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
           </label>
           <select
             id="tipoDocumento"
-            {...register("tipoDocumento")}
+            {...register("tipoDocumento", {
+              required: "Debes seleccionar un tipo de documento",
+            })}
             className="border-b border-gray-300 bg-transparent focus:outline-none focus:border-blue-500 transition-colors py-1"
           >
             <option value="">Selecciona un tipo</option>
@@ -98,7 +118,13 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
           </label>
           <input
             id="numeroDocumento"
-            {...register("numeroDocumento")}
+            {...register("numeroDocumento", {
+              required: "El número de documento es obligatorio",
+              pattern: {
+                value: /^[0-9]{6,15}$/,
+                message: "Debe tener entre 6 y 15 dígitos numéricos",
+              },
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.numeroDocumento?.message === "string" && (
@@ -116,7 +142,13 @@ export default function DatosPersonalesSection({ register, errors }: Props) {
           <input
             id="correo"
             type="email"
-            {...register("correo")}
+            {...register("correo", {
+              required: "El correo es obligatorio",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Correo no válido",
+              },
+            })}
             className="border-b border-gray-300 focus:outline-none focus:border-blue-500 transition-colors py-1"
           />
           {typeof errors.correo?.message === "string" && (
