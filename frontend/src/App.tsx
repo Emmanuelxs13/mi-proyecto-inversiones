@@ -17,6 +17,7 @@ import HistorialSimulaciones from "./views/Admin/HistorialSimulaciones";
 import Estadisticas from "./views/Admin/Estadisticas";
 // import Prestamos from "./views/Usuario/Prestamos"; //El usuario debe llenar un formulario similar al de afiliación para solicitar un prestamo
 // import Afiliaciones from "./views/Usuario/Afiliaciones";
+import CrearRegistro from "./views/Registro/CrearRegistro";
 
 // (Opcional para usuarios normales en el futuro)
 // import UsuarioInicio from "./views/Usuario/Inicio";
@@ -27,6 +28,8 @@ function App() {
       <Routes>
         {/* Página pública */}
         <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<CrearRegistro />} />
+
 
         {/* Redirección base */}
         <Route path="/" element={<Navigate to="/dashboard" />} />
@@ -42,6 +45,7 @@ function App() {
           <Route path="estadisticas" element={<Estadisticas />} />
           {/* <Route path="prestamos" element={<Prestamos />} /> */}
           {/* <Route path="afiliaciones" element={<Afiliaciones />} /> */}
+
         </Route>
 
         {/* Rutas para usuario normal - más adelante
