@@ -19,9 +19,12 @@ const Login = () => {
     try {
       const res = await login(data.correo, data.password);
       saveAuthData(res.token, res.user);
-      res.user.rol === "admin"
-        ? navigate("/dashboard")
-        : navigate("/usuario/inicio");
+      if (res.user.rol === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/usuario/inicio");
+      }
+      
     } catch (err: any) {
       setError("Correo o contraseña incorrectos");
     }
@@ -68,14 +71,14 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => navigate("/recuperar")}
-                className="text-blue-600 hover:underline"
+                className="text-blue-400 hover:underline"
               >
                 ¿Olvidaste tu contraseña?
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/registro")}
-                className="text-blue-600 hover:underline"
+                className="text-blue-400 hover:underline"
               >
                 Crear cuenta
               </button>
@@ -83,13 +86,13 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition"
+              className="w-full bg-primary-darker hover:bg-primary-darkest text-white font-semibold py-2 rounded-lg transition"
             >
               Iniciar sesión
             </button>
           </form>
         </div>
-        <div className="bg-blue-600 text-white text-center py-3 text-sm">
+        <div className="bg-primary-darker text-white text-center py-3 text-sm">
           © {new Date().getFullYear()} Fondo de Empleados FEINPEC
         </div>
       </div>
