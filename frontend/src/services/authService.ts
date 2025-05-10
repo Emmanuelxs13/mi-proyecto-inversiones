@@ -1,10 +1,10 @@
 import axios from "axios";
 import { User } from "../types/User";
 
-const API_URL = "http://localhost:3000/api/auth/login";
+const API_URL = "http://localhost:3000/api/auth";
 
 export interface LoginResponse {
-  token: string;
+  token: string;aja
   user: User;
 }
 
